@@ -92,5 +92,51 @@ body, html {
     z-index: -1;
 }
 
+/**/
 
 /**/
+
+.winner-screen {
+    position: absolute;
+    z-index: -1;
+}
+
+
+/**/
+
+
+.main {
+    display: grid;
+    grid-template-rows: repeat(3, auto);
+}
+
+    .game-board {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        height: 50vh;
+        min-height: 375px;
+        width: 50vh;
+        min-width: 375px;
+        justify-self: center;
+        align-self: start;
+        background-color: var(--lightgrey);
+        border: 3px solid #444;
+        border-radius: 0.5rem;
+    }
+
+    .game-board > div {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        text-align: center;
+        align-items: center;
+        border: 3px solid #444;
+    }
+
+    .game-board > div > p {
+        flex: 1;
+        font-size: 1200%;
+        line-height: 5px;
+        padding-bottom: 15px;
+    }
