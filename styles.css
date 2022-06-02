@@ -1,6 +1,6 @@
 :root { 
     --yellow: #fff600;
-    --orange: #f9b04d;
+    --orange: #ff7d49;
     --pink: #fbb8b8;
     --blue: #34cdef;
     --purple: #928aa0;
@@ -35,12 +35,18 @@ body, html {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 2fr 1fr;
     background-color: var(--pink);
-    border: 4px solid rgb(240, 240, 240);
+    border: 4px solid var(--yellow);
+    border-radius: 1rem;
+    box-shadow: 1px 2px 2px #444;
 }
 
 .start-new-game h1 {
     grid-column: 1/3;
     place-self: center;
+    color: var(--yellow);
+    font-size: max(2.5vw, 35px);
+    text-shadow: 3px 2px #444;
+
 }
 
 .start-new-game button {
@@ -48,11 +54,18 @@ body, html {
     width: 75%;
     justify-self: center;
     align-self: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: max(2vw, 16px);
     font-weight: 400;
+    color: rgb(240, 240, 240);
+    text-shadow: 3px 2px #444;
     background-color: var(--purple);
+    box-shadow: 1px 1px #555;
+    border-radius: 1rem;
 }
 
 .start-new-game button:nth-child(2) {
-    background-color: var(--yellow);
+    background-color: var(--orange);
 }
