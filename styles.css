@@ -109,6 +109,12 @@ body, html {
     display: grid;
     grid-template-rows: repeat(3, auto);
 }
+    .main > h1 {
+        place-self: center;
+        font-size: max(3vw, 40px);
+        color: var(--pink);
+        text-shadow: 2px 2px #444;
+    }
 
     .game-board {
         display: grid;
@@ -120,7 +126,7 @@ body, html {
         min-width: 375px;
         justify-self: center;
         align-self: start;
-        background-color: var(--lightgrey);
+        background-color: #fdfdfd;
         border: 3px solid #444;
         border-radius: 0.5rem;
     }
@@ -139,4 +145,5 @@ body, html {
         font-size: 1200%;
         line-height: 5px;
         padding-bottom: 15px;
+        color: var(--purple);
     }
