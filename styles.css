@@ -147,3 +147,27 @@ body, html {
         padding-bottom: 15px;
         color: var(--purple);
     }
+
+
+
+.bottom-section {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 16px;
+    height: 30px;
+    margin-top: auto;
+    margin-bottom: 5px;
+}
+
+.footer > img {
+    height: 25px;
+    width: 25px;
+    margin-left: 6px;
+}
