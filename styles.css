@@ -63,7 +63,7 @@ body, html {
     font-size: max(2vw, 16px);
     font-weight: 400;
     color: rgb(240, 240, 240);
-    text-shadow: 3px 2px #444;
+    text-shadow: 2px 2px #444;
     background-color: var(--purple);
     box-shadow: 1px 1px #555;
     border-radius: 1rem;
@@ -156,18 +156,41 @@ body, html {
 
 }
 
-.footer {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    font-size: 16px;
-    height: 30px;
-    margin-top: auto;
-    margin-bottom: 5px;
-}
+    /* .player-stats {
+        something: here;
+    } */
 
-.footer > img {
-    height: 25px;
-    width: 25px;
-    margin-left: 6px;
-}
+    .options {
+        display: flex;
+        justify-content: center;
+    }
+
+    .options > button {
+        width: 105px;
+        height: 55px;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 18px;
+        border-radius: 1rem;
+    }
+    .options > button:nth-child(2) {
+        margin: 0px 30px;
+    }
+
+
+
+    .footer {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        font-size: 16px;
+        height: 30px;
+        margin-top: auto;
+        margin-bottom: 5px;
+    }
+
+    .footer > img {
+        height: 25px;
+        width: 25px;
+        margin-left: 6px;
+    }
