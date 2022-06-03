@@ -166,12 +166,17 @@ input[type='text'] {
     justify-content: center;
 }
 
+.options-menu > div:first-child {
+    place-self: center;
+}
+
 .options-menu > div {
     font-size: 20px;
     font-weight: 600;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
     max-width: 350px;
     gap: 10px;
 }
@@ -196,6 +201,17 @@ input[type='text'] {
     color: #ebebeb;
 }
 
+.options-menu > div > button.exit-button {
+    color: #111;
+    width: 35px;
+    height: 35px;
+    background-color: #aaa;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+
+}
+
 input[type='color'] {
     border: none;
     border-radius: 100px 100px;
@@ -208,7 +224,7 @@ input[type='color'] {
 }
 #ig {
     background-color: var(--pink);
-    text-shadow: 1px 1px #111;
+    text-shadow: 1px 2px #111;
 }
 #tt {
     background-color: #222;
