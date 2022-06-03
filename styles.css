@@ -7,7 +7,7 @@
     --lightgrey: #cecece;
     --medgrey: #888888;
     --coral: #ff6060;
-
+    --green: #70ff70;
 }
 
 * {
@@ -74,6 +74,59 @@ body, html {
 
 .start-new-game button:nth-child(2) {
     background-color: var(--orange);
+}
+
+.name-select-screen {
+    position: absolute;
+    height: 35%;
+    min-height: 300px;
+    width: 40%;
+    min-width: 300px;
+    place-self: center;
+    display: grid;
+    grid-template-rows: 3fr 3fr 1fr;
+    background-color: var(--pink);
+    border: 4px solid var(--yellow);
+    border-radius: 1rem;
+    box-shadow: 1px 2px 2px #444;
+    /**/
+    z-index: -1;
+}
+
+.name-select-screen > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+#name-select-text {
+    font-size: 30px;
+}
+
+input[type='text'] {
+    height: 40px;
+    width: 80%;
+    max-width: 450px;
+    border: 4px solid var(--blue);
+    border-radius: 1rem;
+    font-size: 20px;
+    font-weight: 500;
+    padding-left: 10px;
+}
+
+.name-select-screen > button {
+    width: 130px;
+    height: 45px;
+    padding-top: 2px;
+    place-self: center;
+    border: 3px solid var(--blue);
+    border-radius: 1rem;
+    background-color: var(--green);
+    margin-bottom: 15px;
+    font-weight: 600;
+    font-size: 18px;
 }
 
 
@@ -171,6 +224,7 @@ body, html {
         background-color: rgba(0, 0, 0, 0.1);
         width: 50vh;
         min-width: 375px;
+        border-radius: 1rem;
     }
 
     .player-stats > div > p::first-line {
@@ -189,6 +243,7 @@ body, html {
         font-size: 18px;
         line-height: 18px;
         border-radius: 1rem;
+        box-shadow: 1px 1px;
     }
 
     .options > button:nth-child(1) {
