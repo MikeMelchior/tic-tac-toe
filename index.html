@@ -33,13 +33,11 @@
             <button>Start Game</button>
         </div>
         
-        <div class="options-menu">
+        <div class="options-window">
             <div>
                 <h1>Options</h1>
-                <button class="exit-button">x</button>
+                <button class="options-exit">x</button>
             </div>
-            
-
             <div class="background-color-picker">
                 <p>change background color</p>
                 <input type="color" id="background-color-picker" value="#34cdef">
@@ -47,8 +45,7 @@
             <div class="x-o-color-picker">
                 <p>change X/O color</p>
                 <input type="color" id='x-o-color-picker' value="#928aa0">
-            </div>
-            
+            </div>     
             <p>Share with friends!</p>
             <div id="socials">
                 <button id="fb">Faceblock</button>
@@ -66,32 +63,32 @@
         <div class="main">
             <h1>Tic - Tac - Toe</h1>
             <div class="game-board">
-                <div class="square1">
-                    <p>x</p>
+                <div class="square-0">
+                    <p class="square-zero"></p>
                 </div>
-                <div class="square2">
-                    <p>o</p>
+                <div class="square-1">
+                    <p class="square-one"></p>
                 </div>
-                <div class="square3">
-                    <p>x</p>
+                <div class="square-2">
+                    <p class="square-two"></p>
                 </div>
-                <div class="square4">
-                    <p>o</p>
+                <div class="square-3">
+                    <p class="square-three"></p>
                 </div>
-                <div class="square5">
-                    <p>x</p>
+                <div class="square-4">
+                    <p class="square-four"></p>
                 </div>
-                <div class="square6">
-                    <p>o</p>
+                <div class="square-5">
+                    <p class="square-five"></p>
                 </div>
-                <div class="square7">
-                    <p>o</p>
+                <div class="square-6">
+                    <p class="square-six"></p>
                 </div>
-                <div class="square8">
-                    <p>x</p>
+                <div class="square-7">
+                    <p class="square-seven"></p>
                 </div>
-                <div class="square9">
-                    <p>o</p>
+                <div class="square-8">
+                    <p class="square-eight"></p>
                 </div>
             </div>
             <div class="bottom-section">
@@ -107,9 +104,9 @@
                     
                 </div>
                 <div class="options">
-                    <button>Reset</button>
-                    <button>Play vs. Computer</button>
-                    <button>Options</button>
+                    <button class="reset-btn">Reset</button>
+                    <button class="game-mode-btn">Play vs. Computer</button>
+                    <button class="options-btn">Options</button>
                 </div>
                 <div class="footer">
                     <p>&copy; rubberteeth </p>
