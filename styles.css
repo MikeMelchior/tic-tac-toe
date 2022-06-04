@@ -31,7 +31,7 @@ body, html {
 
 .start-new-game, 
 .name-select-screen,
-.options-menu,
+.options-window,
 .winner-screen {
     box-shadow: 4px 4px 14px 8px #444;
 }
@@ -141,7 +141,7 @@ input[type='text'] {
 
 /**/
 
-.options-menu {
+.options-window {
     position: absolute;
     height: 45%;
     min-height: 400px;
@@ -156,21 +156,20 @@ input[type='text'] {
     border-radius: 1rem;
     text-align: center;
     justify-content: center;
-
     z-index: -1;
 }
 
-.options-menu h1 {
+.options-window h1 {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.options-menu > div:first-child {
+.options-window > div:first-child {
     place-self: center;
 }
 
-.options-menu > div {
+.options-window > div {
     font-size: 20px;
     font-weight: 600;
     display: flex;
@@ -185,14 +184,14 @@ input[type='text'] {
     justify-content: center;
 }
 
-.options-menu > p {
+.options-window > p {
     font-size: 20px;
     font-weight: 600;
     padding-top: 20px;
     border-top: 1px solid;
 }
 
-.options-menu > div > button {
+.options-window > div > button {
     font-size: 16px;
     font-weight: 500;
     width: 90px;
@@ -201,7 +200,7 @@ input[type='text'] {
     color: #ebebeb;
 }
 
-.options-menu > div > button.exit-button {
+.options-window > div > button.options-exit {
     color: #111;
     width: 35px;
     height: 35px;
@@ -302,6 +301,7 @@ input[type='color'] {
         display: flex;
         text-align: center;
         align-items: center;
+        justify-content: center;
         border: 3px solid #444;
     }
 
@@ -311,6 +311,7 @@ input[type='color'] {
         line-height: 5px;
         padding-bottom: 15px;
         color: var(--purple);
+        pointer-events: none;
     }
 
 
@@ -383,3 +384,7 @@ input[type='color'] {
         width: 25px;
         margin-left: 6px;
     }
+
+.visible {
+    z-index: 1;
+}
