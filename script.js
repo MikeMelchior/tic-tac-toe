@@ -4,9 +4,6 @@ const gameBoard = (function() {
     let gameboard = ['', '', '', '', '', '', '', '', ''];
 
 
-
-    
-
     const updateBoard = () => {
         for (let i = 0; i < 9; i ++) {
             document.querySelector(`.square-${i}`).children[0].textContent = gameboard[i];
@@ -23,24 +20,31 @@ const gameBoard = (function() {
 
 
 const game = (function() {
+
     const winnerScreen = document.querySelector('.winner-screen');
+    const congratulateWinner = () => {
+        setTimeout(() => {
+            return winnerScreen.classList.add('visible')
+        }, 500);
+        
+    }
     const checkWin = (board) => {
-        if (board[0] == board[1] && board[1] == board[2]) {
-            winnerScreen.classList.add('visible');
-        } else if (board[3] == board[4] && board[4] == board[5]) {
-            winnerScreen.classList.add('visible');
-        } else if (board[6] == board[7] && board[7] == board[8]) {
-            winnerScreen.classList.add('visible');
-        } else if (board[0] == board[3] && board[3] == board[6]) {
-            winnerScreen.classList.add('visible');
-        } else if (board[1] == board[4] && board[4] == board[7]) {
-            winnerScreen.classList.add('visible');
-        } else if (board[2] == board[5] && board[5] == board[8]) {
-            winnerScreen.classList.add('visible');
-        } else if (board[0] == board[4] && board[4] == board[8]) {
-            winnerScreen.classList.add('visible');
-        } else if (board[2] == board[4] && board[4] == board[6]) {
-            winnerScreen.classList.add('visible');
+        if (board[0] == board[1] && board[1] == board[2] && board[2] != '') {
+            congratulateWinner();
+        } else if (board[3] == board[4] && board[4] == board[5] && board[5] != '') {
+            congratulateWinner();
+        } else if (board[6] == board[7] && board[7] == board[8] && board[8] != '') {
+            congratulateWinner();
+        } else if (board[0] == board[3] && board[3] == board[6] && board[6] != '') {
+            congratulateWinner();
+        } else if (board[1] == board[4] && board[4] == board[7] && board[7] != '') {
+            congratulateWinner();
+        } else if (board[2] == board[5] && board[5] == board[8]&& board[8] != '') {
+            congratulateWinner();
+        } else if (board[0] == board[4] && board[4] == board[8]&& board[8] != '') {
+            congratulateWinner();
+        } else if (board[2] == board[4] && board[4] == board[6]&& board[6] != '') {
+            congratulateWinner();
         } else return
     };
 
@@ -67,15 +71,16 @@ const game = (function() {
                 checkWin(gameBoard.gameboard);
                 switchTurns();
             }
-
         }
 
         document.querySelectorAll('.game-board>div').forEach(square => {
                 square.addEventListener('click', makeMove)
             });;
 
+
+
         return {
-            
+
         }
     })();
 
@@ -89,6 +94,7 @@ const game = (function() {
     return {
         singlePlayerGame: singlePlayerGame,
         vsComputer: vsComputer,
+        winnerScreen: winnerScreen,
     }
 })();
 
@@ -106,6 +112,7 @@ controls = (function() {
     const optionsWindow = document.querySelector('.options-window');
     const optionsButton = document.querySelector('.options-btn');
     const optionsExit = document.querySelector('.options-exit');
+    //const winnerScreen = document.querySelector('.winner-screen')
 
     const showOptionsWindow = (e) => {
         optionsWindow.classList.add('visible');
@@ -115,19 +122,28 @@ controls = (function() {
         optionsWindow.classList.remove('visible');
     }
 
-    optionsButton.addEventListener('click', showOptionsWindow);
-    optionsExit.addEventListener('click', hideOptionsWindow);
-
-    const resetBoard = (e) => {
-        gameBoard.gameboard = gameBoard.gameboard.map(x => x = '');
+    const hideWinnerScreen = () => {
+        game.winnerScreen.classList.remove('visible');
+        resetBoard();
     }
 
-    document.querySelector('.reset-btn').addEventListener('click', resetBoard);
+    const resetBoard = () => {
 
+        for (let i = 0; i < 9; i++) {
+            gameBoard.gameboard[i] = '';
+        }
+        gameBoard.updateBoard();
+    }
+
+
+    optionsButton.addEventListener('click', showOptionsWindow);
+    optionsExit.addEventListener('click', hideOptionsWindow);
+    document.querySelector('.reset-btn').addEventListener('click', resetBoard);
+    game.winnerScreen.addEventListener('click', hideWinnerScreen)
 
 
     return {
-        
+        resetBoard: resetBoard,
     }
 
 })();
