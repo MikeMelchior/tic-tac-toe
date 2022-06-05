@@ -388,3 +388,7 @@ input[type='color'] {
 .visible {
     z-index: 1;
 }
+
+.unclickable {
+    pointer-events: none;
+}
