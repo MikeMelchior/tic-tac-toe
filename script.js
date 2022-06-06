@@ -68,9 +68,11 @@ const game = (function() {
         } else return
     };
 
-    const singlePlayerGame = (function() {
+    const twoPlayerGame = (function() {
         playerOneTurn = true;
         playerTwoTurn = false;
+        playerOneName = null;
+        playerTwoName = null;
 
         const switchTurns = () => {
             playerOneTurn = !playerOneTurn,
@@ -97,12 +99,6 @@ const game = (function() {
                 square.addEventListener('click', makeMove)
             });;
 
-
-
-        return {
-            playerOneTurn: playerOneTurn,
-            playerTwoTurn: playerTwoTurn,
-        }
     })();
 
 
@@ -113,7 +109,7 @@ const game = (function() {
 
 
     return {
-        singlePlayerGame: singlePlayerGame,
+        twoPlayerGame: twoPlayerGame,
         vsComputer: vsComputer,
         strike: strike,
         winPosition: winPosition,
@@ -142,14 +138,23 @@ controls = (function() {
     const bgColorPicker = document.querySelector('#background-color-picker');
     const xoColorPicker = document.querySelector('#x-o-color-picker');
     const optionsApply = document.querySelector('.options-apply');
+    const newGameWindow = document.querySelector('.start-new-game');
+    const pvp = document.querySelector('#pvp');
+    const nameSelectScreen = document.querySelector('.name-select-screen');
+    const nameOneInput = document.querySelector('#player-one-name');
+    const nameTwoInput = document.querySelector('#player-two-name');
+    const startGameButton = document.querySelector('#start-game');
+
+
+
 
     const showOptionsWindow = (e) => {
         optionsWindow.classList.remove('hide');
-        makeMainUnclickable()};
+        disableMain()};
 
     const hideOptionsWindow = (e) => {
         optionsWindow.classList.add('hide');
-        restoreMainClickability()};
+        restoreMain()};
 
     const showResetConfirmation = () => {
         document.querySelector('.reset-confirmation').classList.remove('hide')};
@@ -157,13 +162,18 @@ controls = (function() {
     const hideResetConfirmation = () => {
         document.querySelector('.reset-confirmation').classList.add('hide')};
 
+    const hideNameSelectWindow = () => {
+        nameSelectScreen.classList.remove('visible');
+        nameSelectScreen.classList.add('hide')};
+
+
     const winnerScreen = document.querySelector('.winner-screen');
     const congratulateWinner = () => {
 
         setTimeout(() => {
             return winnerScreen.classList.add('visible')
         }, 500);    
-        makeMainUnclickable()};
+        disableMain()};
 
     const hideWinnerScreen = () => {
         winnerScreen.classList.remove('visible');
@@ -171,15 +181,20 @@ controls = (function() {
         game.strike.classList.remove('visible');
         game.strike.classList.add('hide')
         resetBoard();
-        restoreMainClickability();
+        restoreMain();
     }
 
-    const makeMainUnclickable = () => {
-        document.querySelector('.main').classList.add('unclickable');
+    // const pickPlayerNames = () => {
+    //     pvp.addEventListener
+    // }
+
+    const disableMain = () => {
+        main.classList.add('unclickable');
     }
 
-    const restoreMainClickability = () => {
-        document.querySelector('.main').classList.remove('unclickable');
+    const restoreMain = () => {
+        main.classList.remove('unclickable');
+        main.classList.remove('faded')
     }
 
     const resetBoard = () => {
@@ -194,6 +209,22 @@ controls = (function() {
         playerOneTurn = true;
         playerTwoTurn = false;
     }
+
+
+    const choosePVP = () => {
+        newGameWindow.classList.remove('visible');
+        newGameWindow.classList.add('hide');
+        nameSelectScreen.classList.add('visible');
+    };  
+
+    // const chooseVsComputer = () => {
+
+    // }
+
+    const setPlayerNames = () => {
+        playerOneName = nameOneInput.value;
+        playerTwoName = nameTwoInput.value;
+    }    
 
     const setColors = () => {
         main.setAttribute('style',`background-color: ${bgColorPicker.value}`);
@@ -212,11 +243,15 @@ controls = (function() {
     cancelReset.addEventListener('click', hideResetConfirmation);
     optionsApply.addEventListener('click', setColors);
     optionsApply.addEventListener('click', hideOptionsWindow);
+    pvp.addEventListener('click', choosePVP);
+    startGameButton.addEventListener('click', setPlayerNames);
+    startGameButton.addEventListener('click', hideNameSelectWindow);
+    startGameButton.addEventListener('click', restoreMain);
 
     return {
         resetBoard: resetBoard,
-        makeMainUnclickable: makeMainUnclickable,
-        restoreMainClickability: restoreMainClickability,
+        disableMain: disableMain,
+        restoreMain: restoreMain,
         congratulateWinner: congratulateWinner,
     }
 
