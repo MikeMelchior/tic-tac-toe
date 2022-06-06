@@ -204,8 +204,11 @@ controls = (function() {
 })();
 
 
-const addStuff = () => {
-    document.querySelector('.main').classList.add('one','two');
+const test = () => {
+    console.log(document.querySelector('#background-color-picker').value)
+    console.log(document.querySelector('#x-o-color-picker').value)
+    
 }
 
-document.querySelector('.main').addEventListener('click', addStuff)
+
+document.querySelector('.options-apply').addEventListener('click', test)
