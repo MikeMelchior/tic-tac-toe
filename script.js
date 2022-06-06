@@ -142,6 +142,7 @@ controls = (function() {
 
     const hideWinnerScreen = () => {
         winnerScreen.classList.remove('visible');
+        game.strike.classList.remove(game.winPosition)
         game.strike.classList.remove('visible');
         game.strike.classList.add('hide')
         resetBoard();
