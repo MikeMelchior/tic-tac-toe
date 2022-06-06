@@ -136,16 +136,22 @@ controls = (function() {
     const optionsExit = document.querySelector('.options-exit');
     const winnerScreenExit = document.querySelector('.winner-screen>button');
     const resetBtn = document.querySelector('.reset-btn');
+    const openResetConfirmation = document.querySelector('.open-reset-confirmation');
+    const cancelReset = document.querySelector('.cancel-reset');
 
     const showOptionsWindow = (e) => {
-        optionsWindow.classList.add('visible');
-        makeMainUnclickable();
-    }
+        optionsWindow.classList.remove('hide');
+        makeMainUnclickable()};
 
     const hideOptionsWindow = (e) => {
-        optionsWindow.classList.remove('visible');
-        restoreMainClickability();
-    }
+        optionsWindow.classList.add('hide');
+        restoreMainClickability()};
+
+    const showResetConfirmation = () => {
+        document.querySelector('.reset-confirmation').classList.remove('hide')};
+
+    const hideResetConfirmation = () => {
+        document.querySelector('.reset-confirmation').classList.add('hide')};
 
     const winnerScreen = document.querySelector('.winner-screen');
     const congratulateWinner = () => {
@@ -153,8 +159,7 @@ controls = (function() {
         setTimeout(() => {
             return winnerScreen.classList.add('visible')
         }, 500);    
-        makeMainUnclickable();
-    }
+        makeMainUnclickable()};
 
     const hideWinnerScreen = () => {
         winnerScreen.classList.remove('visible');
@@ -190,9 +195,11 @@ controls = (function() {
     optionsButton.addEventListener('click', showOptionsWindow);
     optionsExit.addEventListener('click', hideOptionsWindow);
     resetBtn.addEventListener('click', resetBoard);
-    resetBtn.addEventListener('click', resetTurns)
-    winnerScreenExit.addEventListener('click', hideWinnerScreen)
-
+    resetBtn.addEventListener('click', resetTurns);
+    resetBtn.addEventListener('click', hideResetConfirmation);
+    winnerScreenExit.addEventListener('click', hideWinnerScreen);
+    openResetConfirmation.addEventListener('click', showResetConfirmation);
+    cancelReset.addEventListener('click', hideResetConfirmation);
 
     return {
         resetBoard: resetBoard,
