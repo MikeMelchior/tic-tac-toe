@@ -131,6 +131,7 @@ player = {};
 
 controls = (function() {
 
+    const main = document.querySelector('.main');
     const optionsWindow = document.querySelector('.options-window');
     const optionsButton = document.querySelector('.options-btn');
     const optionsExit = document.querySelector('.options-exit');
@@ -138,6 +139,9 @@ controls = (function() {
     const resetBtn = document.querySelector('.reset-btn');
     const openResetConfirmation = document.querySelector('.open-reset-confirmation');
     const cancelReset = document.querySelector('.cancel-reset');
+    const bgColorPicker = document.querySelector('#background-color-picker');
+    const xoColorPicker = document.querySelector('#x-o-color-picker');
+    const optionsApply = document.querySelector('.options-apply');
 
     const showOptionsWindow = (e) => {
         optionsWindow.classList.remove('hide');
@@ -191,6 +195,12 @@ controls = (function() {
         playerTwoTurn = false;
     }
 
+    const setColors = () => {
+        main.setAttribute('style',`background-color: ${bgColorPicker.value}`);
+        xAndOs = document.querySelectorAll('.game-board>div>p');
+        xAndOs.forEach(element => element.setAttribute('style', `color: ${xoColorPicker.value}`))
+    }
+
 
     optionsButton.addEventListener('click', showOptionsWindow);
     optionsExit.addEventListener('click', hideOptionsWindow);
@@ -200,6 +210,8 @@ controls = (function() {
     winnerScreenExit.addEventListener('click', hideWinnerScreen);
     openResetConfirmation.addEventListener('click', showResetConfirmation);
     cancelReset.addEventListener('click', hideResetConfirmation);
+    optionsApply.addEventListener('click', setColors);
+    optionsApply.addEventListener('click', hideOptionsWindow);
 
     return {
         resetBoard: resetBoard,
@@ -211,11 +223,4 @@ controls = (function() {
 })();
 
 
-const test = () => {
-    console.log(document.querySelector('#background-color-picker').value)
-    console.log(document.querySelector('#x-o-color-picker').value)
-    
-}
 
-
-document.querySelector('.options-apply').addEventListener('click', test)
