@@ -33,7 +33,7 @@
             <button>Start Game</button>
         </div>
         
-        <div class="options-window">
+        <div class="options-window hide">
             <div>
                 <h1>Options</h1>
                 <button class="options-exit">x</button>
@@ -60,6 +60,11 @@
             <h1>Player X Wins</h1>
             <button>Play Again</button>
         </div>  
+
+        <div class="reset-confirmation hide">
+            <p>Are you sure?<br/>Resetting the game will reset all game data, including scores.<br/><em>Continue?</em></p>
+            <button class="reset-btn">Yes, Reset</button><button class="cancel-reset">Cancel</button>
+        </div>
 
         <div class="main">
             <h1>Tic - Tac - Toe</h1>
@@ -108,7 +113,7 @@
                     
                 </div>
                 <div class="options">
-                    <button class="reset-btn">Reset</button>
+                    <button class="open-reset-confirmation">Reset</button>
                     <button class="game-mode-btn">Play vs. Computer</button>
                     <button class="options-btn">Options</button>
                 </div>
@@ -124,12 +129,4 @@
     </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
 
