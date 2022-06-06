@@ -171,9 +171,10 @@ controls = (function() {
     const congratulateWinner = () => {
 
         setTimeout(() => {
-            return winnerScreen.classList.add('visible')
+            winnerScreen.classList.add('visible');
+            disableMain();
         }, 500);    
-        disableMain()};
+        };
 
     const hideWinnerScreen = () => {
         winnerScreen.classList.remove('visible');
@@ -190,6 +191,7 @@ controls = (function() {
 
     const disableMain = () => {
         main.classList.add('unclickable');
+        main.classList.add('faded')
     }
 
     const restoreMain = () => {
@@ -224,7 +226,24 @@ controls = (function() {
     const setPlayerNames = () => {
         playerOneName = nameOneInput.value;
         playerTwoName = nameTwoInput.value;
-    }    
+    } 
+    
+    const verifyNames = () => {
+        
+        if (nameOneInput.value == '') {
+            alert('Please enter a valid name for Player One')
+        } else if (nameTwoInput.value == '') {
+            alert('Please enter a valid name for Player Two')
+        } else {
+            hideNameSelectWindow();
+            restoreMain();
+        }
+    }
+
+    
+
+
+
 
     const setColors = () => {
         main.setAttribute('style',`background-color: ${bgColorPicker.value}`);
@@ -233,20 +252,40 @@ controls = (function() {
     }
 
 
+    //-------------------------TESTING AREA-------------------------//
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    //-------------------------------------------------------------//
+
+
     optionsButton.addEventListener('click', showOptionsWindow);
     optionsExit.addEventListener('click', hideOptionsWindow);
+    optionsApply.addEventListener('click', setColors);
+    optionsApply.addEventListener('click', hideOptionsWindow);
+
+    openResetConfirmation.addEventListener('click', showResetConfirmation);
     resetBtn.addEventListener('click', resetBoard);
     resetBtn.addEventListener('click', resetTurns);
     resetBtn.addEventListener('click', hideResetConfirmation);
-    winnerScreenExit.addEventListener('click', hideWinnerScreen);
-    openResetConfirmation.addEventListener('click', showResetConfirmation);
     cancelReset.addEventListener('click', hideResetConfirmation);
-    optionsApply.addEventListener('click', setColors);
-    optionsApply.addEventListener('click', hideOptionsWindow);
+    
+    winnerScreenExit.addEventListener('click', hideWinnerScreen);
+    
     pvp.addEventListener('click', choosePVP);
     startGameButton.addEventListener('click', setPlayerNames);
-    startGameButton.addEventListener('click', hideNameSelectWindow);
-    startGameButton.addEventListener('click', restoreMain);
+    startGameButton.addEventListener('click', verifyNames);
 
     return {
         resetBoard: resetBoard,
