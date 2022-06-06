@@ -100,7 +100,8 @@ const game = (function() {
 
 
         return {
-            //---
+            playerOneTurn: playerOneTurn,
+            playerTwoTurn: playerTwoTurn,
         }
     })();
 
@@ -133,7 +134,8 @@ controls = (function() {
     const optionsWindow = document.querySelector('.options-window');
     const optionsButton = document.querySelector('.options-btn');
     const optionsExit = document.querySelector('.options-exit');
-    const winnerScreenExit = document.querySelector('.winner-screen>button')
+    const winnerScreenExit = document.querySelector('.winner-screen>button');
+    const resetBtn = document.querySelector('.reset-btn');
 
     const showOptionsWindow = (e) => {
         optionsWindow.classList.add('visible');
@@ -179,10 +181,16 @@ controls = (function() {
         gameBoard.updateBoard();
     }
 
+    const resetTurns = () => {
+        playerOneTurn = true;
+        playerTwoTurn = false;
+    }
+
 
     optionsButton.addEventListener('click', showOptionsWindow);
     optionsExit.addEventListener('click', hideOptionsWindow);
-    document.querySelector('.reset-btn').addEventListener('click', resetBoard);
+    resetBtn.addEventListener('click', resetBoard);
+    resetBtn.addEventListener('click', resetTurns)
     winnerScreenExit.addEventListener('click', hideWinnerScreen)
 
 
