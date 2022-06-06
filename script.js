@@ -21,20 +21,28 @@ const gameBoard = (function() {
 
 const game = (function() {
 
-    const winnerScreen = document.querySelector('.winner-screen');
-    const congratulateWinner = () => {
-        setTimeout(() => {
-            return winnerScreen.classList.add('visible')
-        }, 500);
-        
-    }
+    let winPosition = '';
+
+    const strike = document.querySelector('.strikethrough');
+    const Strikethrough = (position) => {
+
+        strike.classList.add(position);
+        strike.classList.remove('hide'); 
+    };
+
     const checkWin = (board) => {
         if (board[0] == board[1] && board[1] == board[2] && board[2] != '') {
-            congratulateWinner();
+            game.winPosition = 'top-row';
+            Strikethrough(game.winPosition);
+            controls.congratulateWinner();
         } else if (board[3] == board[4] && board[4] == board[5] && board[5] != '') {
-            congratulateWinner();
+            game.winPosition = 'middle-row';
+            Strikethrough(game.winPosition);
+            controls.congratulateWinner();
+            
         } else if (board[6] == board[7] && board[7] == board[8] && board[8] != '') {
             congratulateWinner();
+            Strikethrough('bottom-row');
         } else if (board[0] == board[3] && board[3] == board[6] && board[6] != '') {
             congratulateWinner();
         } else if (board[1] == board[4] && board[4] == board[7] && board[7] != '') {
@@ -80,7 +88,7 @@ const game = (function() {
 
 
         return {
-
+            //---
         }
     })();
 
@@ -94,7 +102,8 @@ const game = (function() {
     return {
         singlePlayerGame: singlePlayerGame,
         vsComputer: vsComputer,
-        winnerScreen: winnerScreen,
+        strike: strike,
+        winPosition: winPosition,
     }
 })();
 
@@ -112,19 +121,38 @@ controls = (function() {
     const optionsWindow = document.querySelector('.options-window');
     const optionsButton = document.querySelector('.options-btn');
     const optionsExit = document.querySelector('.options-exit');
-    //const winnerScreen = document.querySelector('.winner-screen')
+    const winnerScreenExit = document.querySelector('.winner-screen>button')
 
     const showOptionsWindow = (e) => {
         optionsWindow.classList.add('visible');
+        makeMainUnclickable();
     }
 
     const hideOptionsWindow = (e) => {
         optionsWindow.classList.remove('visible');
+        restoreMainClickability();
+    }
+
+    const winnerScreen = document.querySelector('.winner-screen');
+    const congratulateWinner = () => {
+        setTimeout(() => {
+            return winnerScreen.classList.add('visible')
+        }, 500);    
     }
 
     const hideWinnerScreen = () => {
-        game.winnerScreen.classList.remove('visible');
+        winnerScreen.classList.remove('visible');
+        game.strike.classList.remove('visible');
+        game.strike.classList.add('hide')
         resetBoard();
+    }
+
+    const makeMainUnclickable = () => {
+        document.querySelector('.main').classList.add('unclickable');
+    }
+
+    const restoreMainClickability = () => {
+        document.querySelector('.main').classList.remove('unclickable');
     }
 
     const resetBoard = () => {
@@ -139,13 +167,21 @@ controls = (function() {
     optionsButton.addEventListener('click', showOptionsWindow);
     optionsExit.addEventListener('click', hideOptionsWindow);
     document.querySelector('.reset-btn').addEventListener('click', resetBoard);
-    game.winnerScreen.addEventListener('click', hideWinnerScreen)
+    winnerScreenExit.addEventListener('click', hideWinnerScreen)
 
 
     return {
         resetBoard: resetBoard,
+        makeMainUnclickable: makeMainUnclickable,
+        restoreMainClickability: restoreMainClickability,
+        congratulateWinner: congratulateWinner,
     }
 
 })();
 
-    
+
+const addStuff = () => {
+    document.querySelector('.main').classList.add('one','two');
+}
+
+document.querySelector('.main').addEventListener('click', addStuff)
