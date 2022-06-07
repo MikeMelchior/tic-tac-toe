@@ -212,6 +212,10 @@ controls = (function() {
         resetConfirmation.classList.remove('visible')
         restoreMain()};
 
+    const showNameSelectWindow = () => {
+        nameSelectScreen.classList.add('visible');
+        nameSelectScreen.classList.remove('hide')};
+    
     const hideNameSelectWindow = () => {
         nameSelectScreen.classList.remove('visible');
         nameSelectScreen.classList.add('hide')};
@@ -369,6 +373,7 @@ controls = (function() {
     resetBtn.addEventListener('click', resetTurns);
     resetBtn.addEventListener('click', hideResetConfirmation);
     resetBtn.addEventListener('click', resetScores);
+    resetBtn.addEventListener('click', showNameSelectWindow);
     cancelReset.addEventListener('click', hideResetConfirmation);
     
     winnerScreenExit.addEventListener('click', hideWinnerScreen);
