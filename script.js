@@ -39,6 +39,21 @@ const game = (function() {
         winPosition = null;
     }
 
+    
+    const removeGameMode = (mode) => {
+
+    }
+
+    const setGameMode = (mode) => {
+        if (gameMode == 'pvp') {
+            document.querySelectorAll('.game-board>div').forEach(square => {
+                square.addEventListener('click', mode)
+            });
+        } else if (gameMode = 'ai') {
+            //do stuff here
+        } 
+    }
+
     const checkWin = (board) => {
         if (board[0] == board[1] && board[1] == board[2] && board[2] != '') {
             winPosition = 'top-row';
@@ -76,55 +91,57 @@ const game = (function() {
     };
 
     const twoPlayerGame = (function() {
-        if (gameMode == 'pvp') {
-            playerOneTurn = true;
-            playerTwoTurn = false;
-            playerOneName = null;
-            playerTwoName = null;
+        
+        playerOneTurn = true;
+        playerTwoTurn = false;
+        playerOneName = null;
+        playerTwoName = null;
 
-            const switchTurns = () => {
-                playerOneTurn = !playerOneTurn,
-                playerTwoTurn = !playerTwoTurn
-            }
-            
-            const makeMove = (e) => {
-                if(e.target.children[0].textContent != '') {
-                    return 
-                } else if (playerOneTurn){
-                    gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
-                    gameBoard.updateBoard();
-                    checkWin(gameBoard.gameboard);
-                    if (winPosition != null) {
-                        controls.setPlayerScore(playerOne);
-                    }
-                    switchTurns();
-                } else {
-                    gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'o'
-                    gameBoard.updateBoard();
-                    checkWin(gameBoard.gameboard);
-                    if (winPosition != null) {
-                        controls.setPlayerScore(playerTwo);
-                    }
-                    switchTurns();
-                }
-            }
+        controls.highlightPlayer();
 
-        document.querySelectorAll('.game-board>div').forEach(square => {
-                square.addEventListener('click', makeMove)
-            });;
+        const switchTurns = () => {
+            playerOneTurn = !playerOneTurn,
+            playerTwoTurn = !playerTwoTurn
+            controls.highlightPlayer();
         }
+        
+        const pvpMode = (e) => {
+            if(e.target.children[0].textContent != '') {
+                return 
+            } else if (playerOneTurn){
+                gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
+                gameBoard.updateBoard();
+                checkWin(gameBoard.gameboard);
+                if (winPosition != null) {
+                    controls.setPlayerScore(playerOne);
+                }
+                switchTurns();
+            } else {
+                gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'o'
+                gameBoard.updateBoard();
+                checkWin(gameBoard.gameboard);
+                if (winPosition != null) {
+                    controls.setPlayerScore(playerTwo);
+                }
+                switchTurns();
+            }
+        }
+        setGameMode(pvpMode);
+        
+        
+        
     });
 
 
-    // const vsComputer = (function() {
-
-    // });
+    const vsComputer = (function() {
+        game.gameMode = 'ai'
+    });
 
 
 
     return {
         twoPlayerGame: twoPlayerGame,
-        // vsComputer: vsComputer,
+        vsComputer: vsComputer,
         strike: strike,
         returnWinPosition: returnWinPosition,
         resetWinPosition: resetWinPosition,
@@ -171,6 +188,8 @@ controls = (function() {
     const winnerText = document.querySelector('.winner-screen>h1');
     const playerOneScore = document.querySelector('.player-one-score');
     const playerTwoScore = document.querySelector('.player-two-score');
+    const leftPlayerDiv = document.querySelector('div.player-one');
+    const rightPlayerDiv = document.querySelector('div.player-two');
 
 
     const showOptionsWindow = (e) => {
@@ -191,7 +210,6 @@ controls = (function() {
     const hideResetConfirmation = () => {
         resetConfirmation.classList.add('hide')
         resetConfirmation.classList.remove('visible')
-
         restoreMain()};
 
     const hideNameSelectWindow = () => {
@@ -246,6 +264,7 @@ controls = (function() {
     const resetTurns = () => {
         playerOneTurn = true;
         playerTwoTurn = false;
+        highlightPlayer();
     }
 
     const resetScores = () => {
@@ -268,23 +287,31 @@ controls = (function() {
 
     // }
 
-
+    const highlightPlayer = () => {
+        if (playerOneTurn) {
+            leftPlayerDiv.classList.add('active-player');
+            rightPlayerDiv.classList.remove('active-player');
+        } else {
+            leftPlayerDiv.classList.remove('active-player');
+            rightPlayerDiv.classList.add('active-player');
+        }
+    }
 
     
 
     const setPlayerNames = () => {
         playerOne = player(nameOneInput.value);
         playerTwo = player(nameTwoInput.value);
-        document.querySelector('p.player-one').textContent = `${playerOne.name}'s score :`;
-        document.querySelector('p.player-two').textContent = `${playerTwo.name}'s score :`}; 
+        document.querySelector('p.player-one').textContent = `${playerOne.name}`;
+        document.querySelector('p.player-two').textContent = `${playerTwo.name}`}; 
     
     const setPlayerScore = (player) => {
         if (player == playerOne) {
             playerOne.score++;
-            playerOneScore.textContent = playerOne.score;
+            playerOneScore.textContent = `score ${playerOne.score}`;
         } else if (player == playerTwo) {
             playerTwo.score++;
-            playerTwoScore.textContent = playerTwo.score;
+            playerTwoScore.textContent = `score ${playerTwo.score}`;
         }
     }
 
@@ -358,6 +385,7 @@ controls = (function() {
         setPlayerNames: setPlayerNames,
         setPlayerScore: setPlayerScore,
         removeStrikethrough: removeStrikethrough,
+        highlightPlayer: highlightPlayer,
     }
 
 })();
