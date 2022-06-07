@@ -62,36 +62,32 @@ const game = (function() {
         if (board[0] == board[1] && board[1] == board[2] && board[2] != '') {
             winPosition = 'top-row';
             Strikethrough(winPosition);
-            controls.congratulateWinner();
         } else if (board[3] == board[4] && board[4] == board[5] && board[5] != '') {
             winPosition = 'middle-row';
-            Strikethrough(winPosition);
-            controls.congratulateWinner();     
+            Strikethrough(winPosition);    
         } else if (board[6] == board[7] && board[7] == board[8] && board[8] != '') {
             winPosition = 'bottom-row';
             Strikethrough(winPosition);
-            controls.congratulateWinner(); 
         } else if (board[0] == board[3] && board[3] == board[6] && board[6] != '') {
             winPosition = 'left-column';
             Strikethrough(winPosition);
-            controls.congratulateWinner();
         } else if (board[1] == board[4] && board[4] == board[7] && board[7] != '') {
             winPosition = 'middle-column';
             Strikethrough(winPosition);
-            controls.congratulateWinner();
         } else if (board[2] == board[5] && board[5] == board[8] && board[8] != '') {
             winPosition = 'right-column';
             Strikethrough(winPosition);    
-            controls.congratulateWinner();
         } else if (board[0] == board[4] && board[4] == board[8] && board[8] != '') {
             winPosition = 'diagonal-right';
             Strikethrough(winPosition);
-            controls.congratulateWinner();
         } else if (board[2] == board[4] && board[4] == board[6] && board[6] != '') {
             winPosition = 'diagonal-left';
             Strikethrough(winPosition);
+        } 
+
+        if (winPosition != null) {
             controls.congratulateWinner();
-        } else return
+        }
     };
 
     const twoPlayerGame = (function() {
