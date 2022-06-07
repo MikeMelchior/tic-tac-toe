@@ -41,7 +41,11 @@ const game = (function() {
 
     
     const removeGameMode = (mode) => {
-
+        document.querySelectorAll('.game-board>div').forEach(square => {
+            let old_element = square
+            let new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
+        })
     }
 
     const setGameMode = (mode) => {
@@ -129,7 +133,6 @@ const game = (function() {
         setGameMode(pvpMode);
         
         
-        
     });
 
 
@@ -146,6 +149,7 @@ const game = (function() {
         returnWinPosition: returnWinPosition,
         resetWinPosition: resetWinPosition,
         gameMode: gameMode,
+        removeGameMode: removeGameMode, 
     }
 })();
 
