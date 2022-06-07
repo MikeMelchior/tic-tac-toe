@@ -22,6 +22,7 @@ const gameBoard = (function() {
 const game = (function() {
 
     let winPosition = null;
+    let gameMode = 'pvp';
 
     const strike = document.querySelector('.strikethrough');
     const Strikethrough = (position) => {
@@ -30,95 +31,104 @@ const game = (function() {
         strike.classList.remove('hide'); 
     };
 
-    
+    const returnWinPosition = () => {
+        return winPosition;
+    }
+
+    const resetWinPosition = () => {
+        winPosition = null;
+    }
 
     const checkWin = (board) => {
         if (board[0] == board[1] && board[1] == board[2] && board[2] != '') {
-            game.winPosition = 'top-row';
-            Strikethrough(game.winPosition);
+            winPosition = 'top-row';
+            Strikethrough(winPosition);
             controls.congratulateWinner();
         } else if (board[3] == board[4] && board[4] == board[5] && board[5] != '') {
-            game.winPosition = 'middle-row';
-            Strikethrough(game.winPosition);
+            winPosition = 'middle-row';
+            Strikethrough(winPosition);
             controls.congratulateWinner();     
         } else if (board[6] == board[7] && board[7] == board[8] && board[8] != '') {
-            game.winPosition = 'bottom-row';
-            Strikethrough(game.winPosition);
+            winPosition = 'bottom-row';
+            Strikethrough(winPosition);
             controls.congratulateWinner(); 
         } else if (board[0] == board[3] && board[3] == board[6] && board[6] != '') {
-            game.winPosition = 'left-column';
-            Strikethrough(game.winPosition);
+            winPosition = 'left-column';
+            Strikethrough(winPosition);
             controls.congratulateWinner();
         } else if (board[1] == board[4] && board[4] == board[7] && board[7] != '') {
-            game.winPosition = 'middle-column';
-            Strikethrough(game.winPosition);
+            winPosition = 'middle-column';
+            Strikethrough(winPosition);
             controls.congratulateWinner();
         } else if (board[2] == board[5] && board[5] == board[8] && board[8] != '') {
-            game.winPosition = 'right-column';
-            Strikethrough(game.winPosition);    
+            winPosition = 'right-column';
+            Strikethrough(winPosition);    
             controls.congratulateWinner();
         } else if (board[0] == board[4] && board[4] == board[8] && board[8] != '') {
-            game.winPosition = 'diagonal-right';
-            Strikethrough(game.winPosition);
+            winPosition = 'diagonal-right';
+            Strikethrough(winPosition);
             controls.congratulateWinner();
         } else if (board[2] == board[4] && board[4] == board[6] && board[6] != '') {
-            game.winPosition = 'diagonal-left';
-            Strikethrough(game.winPosition);
+            winPosition = 'diagonal-left';
+            Strikethrough(winPosition);
             controls.congratulateWinner();
         } else return
     };
 
     const twoPlayerGame = (function() {
-        playerOneTurn = true;
-        playerTwoTurn = false;
-        playerOneName = null;
-        playerTwoName = null;
+        if (gameMode == 'pvp') {
+            playerOneTurn = true;
+            playerTwoTurn = false;
+            playerOneName = null;
+            playerTwoName = null;
 
-        const switchTurns = () => {
-            playerOneTurn = !playerOneTurn,
-            playerTwoTurn = !playerTwoTurn
-        }
-        
-        const makeMove = (e) => {
-            if(e.target.children[0].textContent != '') {
-                return 
-            } else if (playerOneTurn){
-                gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
-                gameBoard.updateBoard();
-                checkWin(gameBoard.gameboard);
-                if (game.winPosition != null) {
-                    controls.setPlayerScore(playerOne);
-                }
-                switchTurns();
-            } else {
-                gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'o'
-                gameBoard.updateBoard();
-                checkWin(gameBoard.gameboard);
-                if (game.winPosition != null) {
-                    controls.setPlayerScore(playerTwo);
-                }
-                switchTurns();
+            const switchTurns = () => {
+                playerOneTurn = !playerOneTurn,
+                playerTwoTurn = !playerTwoTurn
             }
-        }
+            
+            const makeMove = (e) => {
+                if(e.target.children[0].textContent != '') {
+                    return 
+                } else if (playerOneTurn){
+                    gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
+                    gameBoard.updateBoard();
+                    checkWin(gameBoard.gameboard);
+                    if (winPosition != null) {
+                        controls.setPlayerScore(playerOne);
+                    }
+                    switchTurns();
+                } else {
+                    gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'o'
+                    gameBoard.updateBoard();
+                    checkWin(gameBoard.gameboard);
+                    if (winPosition != null) {
+                        controls.setPlayerScore(playerTwo);
+                    }
+                    switchTurns();
+                }
+            }
 
         document.querySelectorAll('.game-board>div').forEach(square => {
                 square.addEventListener('click', makeMove)
             });;
+        }
+    });
 
-    })();
 
+    // const vsComputer = (function() {
 
-    const vsComputer = (function() {
-
-    })();
+    // });
 
 
 
     return {
         twoPlayerGame: twoPlayerGame,
-        vsComputer: vsComputer,
+        // vsComputer: vsComputer,
         strike: strike,
-        winPosition: winPosition,
+        returnWinPosition: returnWinPosition,
+        resetWinPosition: resetWinPosition,
+        gameMode: gameMode,
     }
 })();
 
@@ -146,6 +156,7 @@ controls = (function() {
     const optionsExit = document.querySelector('.options-exit');
     const winnerScreenExit = document.querySelector('.winner-screen>button');
     const resetBtn = document.querySelector('.reset-btn');
+    const resetConfirmation = document.querySelector('.reset-confirmation');
     const openResetConfirmation = document.querySelector('.open-reset-confirmation');
     const cancelReset = document.querySelector('.cancel-reset');
     const bgColorPicker = document.querySelector('#background-color-picker');
@@ -164,32 +175,41 @@ controls = (function() {
 
     const showOptionsWindow = (e) => {
         optionsWindow.classList.remove('hide');
-        optionsWindow.classList.add('visible')
+        optionsWindow.classList.add('visible');
         disableMain()};
 
     const hideOptionsWindow = (e) => {
         optionsWindow.classList.add('hide');
+        optionsWindow.classList.remove('visible');
         restoreMain()};
 
     const showResetConfirmation = () => {
-        document.querySelector('.reset-confirmation').classList.remove('hide')};
+        resetConfirmation.classList.remove('hide');
+        resetConfirmation.classList.add('visible');
+        disableMain()};
 
     const hideResetConfirmation = () => {
-        document.querySelector('.reset-confirmation').classList.add('hide')};
+        resetConfirmation.classList.add('hide')
+        resetConfirmation.classList.remove('visible')
+
+        restoreMain()};
 
     const hideNameSelectWindow = () => {
         nameSelectScreen.classList.remove('visible');
         nameSelectScreen.classList.add('hide')};
 
-
+    const removeStrikethrough = () => {
+        game.strike.classList.remove(game.returnWinPosition());
+        game.resetWinPosition();
+        game.strike.classList.remove('visible');
+        game.strike.classList.add('hide');
+    };
+    
     const winnerScreen = document.querySelector('.winner-screen');
     
     const hideWinnerScreen = () => {
         winnerScreen.classList.remove('visible');
-        game.strike.classList.remove(game.winPosition);
-        game.winPosition = null;
-        game.strike.classList.remove('visible');
-        game.strike.classList.add('hide');
+        removeStrikethrough();
         resetBoard();
         restoreMain();
     }
@@ -204,10 +224,6 @@ controls = (function() {
             disableMain();
         }, 500)};
         
-
-    // const pickPlayerNames = () => {
-    //     pvp.addEventListener
-    // }
 
     const disableMain = () => {
         main.classList.add('unclickable');
@@ -241,6 +257,8 @@ controls = (function() {
 
 
     const choosePVP = () => {
+        game.gameMode = 'pvp'
+        game.twoPlayerGame();
         newGameWindow.classList.remove('visible');
         newGameWindow.classList.add('hide');
         nameSelectScreen.classList.add('visible');
@@ -339,6 +357,7 @@ controls = (function() {
         congratulateWinner: congratulateWinner, 
         setPlayerNames: setPlayerNames,
         setPlayerScore: setPlayerScore,
+        removeStrikethrough: removeStrikethrough,
     }
 
 })();
