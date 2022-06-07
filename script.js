@@ -21,7 +21,7 @@ const gameBoard = (function() {
 
 const game = (function() {
 
-    let winPosition = '';
+    let winPosition = null;
 
     const strike = document.querySelector('.strikethrough');
     const Strikethrough = (position) => {
@@ -86,11 +86,17 @@ const game = (function() {
                 gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
                 gameBoard.updateBoard();
                 checkWin(gameBoard.gameboard);
+                if (game.winPosition != null) {
+                    controls.setPlayerScore(playerOne);
+                }
                 switchTurns();
             } else {
                 gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'o'
                 gameBoard.updateBoard();
                 checkWin(gameBoard.gameboard);
+                if (game.winPosition != null) {
+                    controls.setPlayerScore(playerTwo);
+                }
                 switchTurns();
             }
         }
@@ -117,12 +123,19 @@ const game = (function() {
 })();
 
 
-player = {};
+
+
+//------------------------------------------------------------------------
+const player = (name) => {
+    let score = 0;
+    
+    return {name, score}
+};
 
 
 
 
-
+//--------------------------------------------------------------------------
 
 
 controls = (function() {
@@ -144,12 +157,14 @@ controls = (function() {
     const nameOneInput = document.querySelector('#player-one-name');
     const nameTwoInput = document.querySelector('#player-two-name');
     const startGameButton = document.querySelector('#start-game');
-
-
+    const winnerText = document.querySelector('.winner-screen>h1');
+    const playerOneScore = document.querySelector('.player-one-score');
+    const playerTwoScore = document.querySelector('.player-two-score');
 
 
     const showOptionsWindow = (e) => {
         optionsWindow.classList.remove('hide');
+        optionsWindow.classList.add('visible')
         disableMain()};
 
     const hideOptionsWindow = (e) => {
@@ -168,22 +183,27 @@ controls = (function() {
 
 
     const winnerScreen = document.querySelector('.winner-screen');
-    const congratulateWinner = () => {
-
-        setTimeout(() => {
-            winnerScreen.classList.add('visible');
-            disableMain();
-        }, 500);    
-        };
-
+    
     const hideWinnerScreen = () => {
         winnerScreen.classList.remove('visible');
-        game.strike.classList.remove(game.winPosition)
+        game.strike.classList.remove(game.winPosition);
+        game.winPosition = null;
         game.strike.classList.remove('visible');
-        game.strike.classList.add('hide')
+        game.strike.classList.add('hide');
         resetBoard();
         restoreMain();
     }
+    const congratulateWinner = () => {
+        if (playerOneTurn) {
+            winnerText.textContent = `${playerOne.name} Wins!`
+        } else {
+            winnerText.textContent = `${playerTwo.name} Wins!`
+        }
+        setTimeout(() => {
+            winnerScreen.classList.add('visible');
+            disableMain();
+        }, 500)};
+        
 
     // const pickPlayerNames = () => {
     //     pvp.addEventListener
@@ -212,6 +232,13 @@ controls = (function() {
         playerTwoTurn = false;
     }
 
+    const resetScores = () => {
+        playerOne.score = 0;
+        playerOneScore.textContent = 0;
+        playerTwo.score = 0;
+        playerTwoScore.textContent = 0;
+    }
+
 
     const choosePVP = () => {
         newGameWindow.classList.remove('visible');
@@ -223,11 +250,28 @@ controls = (function() {
 
     // }
 
-    const setPlayerNames = () => {
-        playerOneName = nameOneInput.value;
-        playerTwoName = nameTwoInput.value;
-    } 
+
+
     
+
+    const setPlayerNames = () => {
+        playerOne = player(nameOneInput.value);
+        playerTwo = player(nameTwoInput.value);
+        document.querySelector('p.player-one').textContent = `${playerOne.name}'s score :`;
+        document.querySelector('p.player-two').textContent = `${playerTwo.name}'s score :`}; 
+    
+    const setPlayerScore = (player) => {
+        if (player == playerOne) {
+            playerOne.score++;
+            playerOneScore.textContent = playerOne.score;
+        } else if (player == playerTwo) {
+            playerTwo.score++;
+            playerTwoScore.textContent = playerTwo.score;
+        }
+    }
+
+
+
     const verifyNames = () => {
         
         if (nameOneInput.value == '') {
@@ -279,6 +323,7 @@ controls = (function() {
     resetBtn.addEventListener('click', resetBoard);
     resetBtn.addEventListener('click', resetTurns);
     resetBtn.addEventListener('click', hideResetConfirmation);
+    resetBtn.addEventListener('click', resetScores);
     cancelReset.addEventListener('click', hideResetConfirmation);
     
     winnerScreenExit.addEventListener('click', hideWinnerScreen);
@@ -291,7 +336,9 @@ controls = (function() {
         resetBoard: resetBoard,
         disableMain: disableMain,
         restoreMain: restoreMain,
-        congratulateWinner: congratulateWinner,
+        congratulateWinner: congratulateWinner, 
+        setPlayerNames: setPlayerNames,
+        setPlayerScore: setPlayerScore,
     }
 
 })();
