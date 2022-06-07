@@ -307,7 +307,7 @@ body, html {
 }
 
     .winner-screen h1 {
-        place-self: end;
+        text-align: center;
         text-shadow: 1px 1px 2px goldenrod;
     }
 
@@ -442,8 +442,8 @@ body, html {
             text-align: center;
             margin: 10px 0px 25px 0px;
             padding: 5px 0px 5px 0px;
-            font-weight: 500;
-            font-size: 18px;
+            font-weight: 600;
+            font-size: 16px;
             background-color: rgba(0, 0, 0, 0.1);
             width: 50vh;
             min-width: 375px;
