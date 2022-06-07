@@ -49,7 +49,7 @@ body, html {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 2fr 1fr;
-    background-color: var(--lightyellow);
+    background-color: #3a3a3a;
     border: 4px solid #000;
     border-radius: 1rem;
 }
@@ -437,10 +437,9 @@ body, html {
     }
 
         .player-stats {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             text-align: center;
-            justify-content: center;
-            gap: 50px;
             margin: 10px 0px 25px 0px;
             padding: 5px 0px 5px 0px;
             font-weight: 500;
@@ -448,6 +447,12 @@ body, html {
             background-color: rgba(0, 0, 0, 0.1);
             width: 50vh;
             min-width: 375px;
+            height: 65px;
+            border-radius: 1rem;
+        }
+        .player-stats > div {
+            width: 160px;
+            place-self: center;
             border-radius: 1rem;
         }
 
@@ -513,4 +518,8 @@ body, html {
 
 .faded {
     opacity: 0.6;
+}
+
+.active-player {
+    border: 1px solid greenyellow;
 }
