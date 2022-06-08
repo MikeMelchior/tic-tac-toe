@@ -7,8 +7,10 @@
     --purple: #928aa0;
     --lightgrey: #ebebeb;
     --medgrey: #888888;
+    --menublack:#3a3a3a;
     --coral: #ff6060;
     --green: #70ff70;
+
 }
 
 * {
@@ -38,7 +40,6 @@ body, html {
     box-shadow: 4px 4px 14px 8px #444;
 }
 
-
 .start-new-game {
     position: absolute;
     height: 35%;
@@ -49,7 +50,7 @@ body, html {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 2fr 1fr;
-    background-color: #3a3a3a;
+    background-color: var(--menublack);
     border: 3px solid var(--medgrey);
     border-radius: 1rem;
 }
@@ -98,7 +99,7 @@ body, html {
     place-self: center;
     display: grid;
     grid-template-rows: 3fr 3fr 1fr;
-    background-color: #3a3a3a;
+    background-color: var(--menublack);
     border: 4px solid var(--medgrey);
     border-radius: 1rem;
 }
@@ -144,9 +145,6 @@ body, html {
         box-shadow: 1px 1px 4px #444;
     }
 
-
-/**/
-
 .options-window {
     position: absolute;
     height: 45%;
@@ -156,9 +154,10 @@ body, html {
     max-width: 500px;
     place-self: center;
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr 1fr 0.5fr 1fr;
-    background-color: var(--lightgrey);
-    border: 4px solid #444;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    background-color: var(--menublack);
+    border: 4px solid var(--medgrey);
+    color: var(--lightgrey);
     border-radius: 1rem;
     text-align: center;
     justify-content: center;
@@ -198,24 +197,34 @@ body, html {
     }
 
     .options-apply {
-        height: 35px;
+        height: 40px;
         width: 130px;
         place-self: center;
         background-color: var(--coral);
         color: #efefef;
         font-weight: 600;
         font-size: 16px;
+        border: 2px solid #efefef;
         border-radius: 2rem;
     }
 
-    .options-window > div > a > button {
-        font-size: 16px;
+    button#share-button {
+        height: 80%;
+        width: 80%;
+        place-self: center;
         font-weight: 500;
-        width: 90px;
-        height: 40px;
+        font-size: 25px;
+        background-color: #377eff;
         border-radius: 1rem;
-        color: #ebebeb;
+        border: 2px solid;
+        line-height: 20px;
+        padding: 5px;
+        color: white;
     }
+
+    #share-button > img {
+        height: 30px;
+    }  
 
     .options-window > div > button.options-exit {
         color: #111;
@@ -228,25 +237,12 @@ body, html {
         border-radius: 1rem;
         font-size: large;
         font-weight: 500;
-
     }
 
     input[type='color'] {
         border: none;
-        border-radius: 100px 100px;
+        background-color: var(--menublack);
         height: 50px;
-    }
-
-    #fb {
-        background-color: blue;
-        text-shadow: 1px 1px #111;
-    }
-    #ig {
-        background-color: var(--pink);
-        text-shadow: 1px 2px #111;
-    }
-    #tt {
-        background-color: #222;
     }
 
 .reset-confirmation {
@@ -259,8 +255,10 @@ body, html {
     display: grid;
     grid-template-rows: 3fr 1fr;
     grid-template-columns: 1fr 1fr;
-    background-color: var(--orange);
-    border: 8px solid red;
+    background-color: var(--menublack);
+    border: 4px solid var(--medgrey);
+    color: var(--lightgrey);
+    text-shadow: 1px 1px 50px red;
     border-radius: 1rem;
 }   
     .reset-confirmation > p {
@@ -301,7 +299,7 @@ body, html {
     justify-content: center;
     align-items: center ;
     height: 20%;
-    min-height: 150px;
+    min-height: 170px;
     width: 80%;
     max-width: 500px;
     background-color: #5a5a5af2;
@@ -326,10 +324,6 @@ body, html {
         font-weight: 900;
         box-shadow: 1px 1px;
     }
-
-
-/**/
-
 
 .main {
     display: grid;
@@ -393,12 +387,10 @@ body, html {
 
                 .diagonal-right {
                     transform: rotate(45deg);
-                    width: 120%;
                 }
 
                 .diagonal-left {
                     transform: rotate(315deg);
-                    width: 120%;
                 }
 
                 .middle-column {
@@ -414,7 +406,6 @@ body, html {
                     transform: rotate(90deg);
                     margin-left: 67%;
                 }
-
 
             .game-board > div {
                 height: 100%;
@@ -435,8 +426,6 @@ body, html {
                 color: var(--purple);
                 pointer-events: none;
             }
-
-
 
     .bottom-section {
         display: flex;
@@ -460,6 +449,7 @@ body, html {
             border-radius: 1rem;
             box-shadow: 2px 2px;
         }
+
         .player-stats > div {
             display: flex;
             flex-direction: column;
@@ -502,8 +492,6 @@ body, html {
             background-color: var(--medgrey);
         }
 
-
-
     .footer {
         display: flex;
         justify-content: center;
@@ -526,6 +514,7 @@ body, html {
 
 .hide {
     z-index: -1;
+    opacity: 0;
 }
 
 .unclickable {
@@ -537,5 +526,5 @@ body, html {
 }
 
 .active-player {
-    background-color: rgba(173, 255, 47, 0.4);
+    box-shadow: 0px 0px 10px rgba(173, 255, 47, 1);
 }
