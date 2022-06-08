@@ -7,8 +7,7 @@ const gameBoard = (function() {
     const updateBoard = () => {
         for (let i = 0; i < 9; i ++) {
             document.querySelector(`.square-${i}`).children[0].textContent = gameboard[i];
-        }
-    }
+        }};
 
     return {
         updateBoard: updateBoard,
@@ -18,35 +17,34 @@ const gameBoard = (function() {
 })();
 
 
-
 const game = (function() {
 
     let winPosition = null;
     let gameMode = 'pvp';
 
     const strike = document.querySelector('.strikethrough');
+    // transform strikethrough with use of class determined by winning 'position' (ie. top-row or left-column)
     const Strikethrough = (position) => {
-
         strike.classList.add(position);
         strike.classList.remove('hide'); 
     };
 
     const returnWinPosition = () => {
-        return winPosition;
-    }
+        return winPosition
+    };
 
     const resetWinPosition = () => {
         winPosition = null;
-    }
+    };
 
-    
+    // clones game board nodes so that all event listeners are removed
     const removeGameMode = (mode) => {
         document.querySelectorAll('.game-board>div').forEach(square => {
-            let old_element = square
+            let old_element = square;
             let new_element = old_element.cloneNode(true);
             old_element.parentNode.replaceChild(new_element, old_element);
         })
-    }
+    };
 
     const setGameMode = (mode) => {
         if (gameMode == 'pvp') {
@@ -55,8 +53,8 @@ const game = (function() {
             });
         } else if (gameMode = 'ai') {
             //do stuff here
-        } 
-    }
+        }; 
+    };
 
     const checkWin = (board) => {
         if (board[0] == board[1] && board[1] == board[2] && board[2] != '') {
@@ -83,18 +81,16 @@ const game = (function() {
         } else if (board[2] == board[4] && board[4] == board[6] && board[6] != '') {
             winPosition = 'diagonal-left';
             Strikethrough(winPosition);
-        } 
+        }; 
 
         if (winPosition != null) {
             controls.congratulateWinner();
-        }
+        };
     };
 
     const twoPlayerGame = (function() {
         
         playerOneTurn = true;
-        playerOneName = null;
-        playerTwoName = null;
 
         controls.highlightPlayer();
 
@@ -111,7 +107,7 @@ const game = (function() {
                 gameBoard.updateBoard();
                 checkWin(gameBoard.gameboard);
                 if (winPosition != null) {
-                    controls.setPlayerScore(playerOne);
+                    playerOne.incrementScore();
                 }
                 switchTurns();
             } else {
@@ -119,9 +115,12 @@ const game = (function() {
                 gameBoard.updateBoard();
                 checkWin(gameBoard.gameboard);
                 if (winPosition != null) {
-                    controls.setPlayerScore(playerTwo);
+                    playerTwo.incrementScore();
                 }
                 switchTurns();
+            }
+            if (winPosition != null) {
+                controls.updateScores();
             }
         }
         setGameMode(pvpMode);
@@ -131,7 +130,15 @@ const game = (function() {
 
 
     const vsComputer = (function() {
-        game.gameMode = 'ai';
+        let singlePlayerTurn = true;
+
+        const aiMode = () => {
+
+        }
+
+        
+
+
         // comp move -> Math.floor(Math.random()*9) ... ?
     });
 
@@ -311,43 +318,30 @@ controls = (function() {
     }
 
     
-
     const setPlayerNames = () => {
         playerOne = player(nameOneInput.value);
         playerTwo = player(nameTwoInput.value);
         if (playerTwo.name != '') {
             document.querySelector('p.player-one').textContent = `${playerOne.name}`;
-        document.querySelector('p.player-two').textContent = `${playerTwo.name}`}}; 
+            document.querySelector('p.player-two').textContent = `${playerTwo.name}`}}; 
+        // if gamemode is ai .. do stuff
+           
+    const updateScores = () => {
+        playerOneScore.textContent = `score ${playerOne.returnScore()}`;
+        playerTwoScore.textContent = `score ${playerTwo.returnScore()}`};
     
-            // updatePlayerScore = () => {
-                // do stuff better here
-            //}
-    const setPlayerScore = (player) => {
-        if (player == playerOne) {
-            playerOne.incrementScore();
-            playerOneScore.textContent = playerOne.returnScore();
-        } else if (player == playerTwo) {
-            playerTwo.incrementScore();
-            playerTwoScore.textContent = playerTwo.returnScore();
-        }
-    }
-
-
 
     const verifyNames = () => {
-        
         if (nameOneInput.value == '') {
             alert('Please enter a valid name for Player One')
         } else if (nameTwoInput.value == '') {
             alert('Please enter a valid name for Player Two')
         } else {
             hideNameSelectWindow();
-            restoreMain();
-        }
-    }
+            restoreMain()
+        }};
 
     
-
     // navigation for share button
     const title = document.title;
     const url = document.querySelector('link[rel=canonical]') ? document.querySelector('link[rel=canonical]').href : document.location.href;
@@ -420,7 +414,7 @@ controls = (function() {
         restoreMain: restoreMain,
         congratulateWinner: congratulateWinner, 
         setPlayerNames: setPlayerNames,
-        setPlayerScore: setPlayerScore,
+        updateScores: updateScores,
         removeStrikethrough: removeStrikethrough,
         highlightPlayer: highlightPlayer,
     }
