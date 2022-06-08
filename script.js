@@ -89,9 +89,9 @@ const game = (function() {
     };
 
     const twoPlayerGame = (function() {
-        
-        playerOneTurn = true;
 
+        //set player one to have first turn
+        playerOneTurn = true;
         controls.highlightPlayer();
 
         const switchTurns = () => {
@@ -99,12 +99,16 @@ const game = (function() {
             controls.highlightPlayer();
         }
         
+        // event listener function added to each 'square' when pvp is selected
         const pvpMode = (e) => {
+            // check if 'square' has already been taken
             if(e.target.children[0].textContent != '') {
                 return 
             } else if (playerOneTurn){
+                // store 'x' in gameboard array and update the board
                 gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
                 gameBoard.updateBoard();
+                // check board for win, and if won, increments score
                 checkWin(gameBoard.gameboard);
                 if (winPosition != null) {
                     playerOne.incrementScore();
@@ -123,6 +127,7 @@ const game = (function() {
                 controls.updateScores();
             }
         }
+        // adds event listener to each square for PvP game-play
         setGameMode(pvpMode);
         
         
@@ -205,32 +210,37 @@ controls = (function() {
     const showOptionsWindow = (e) => {
         optionsWindow.classList.remove('hide');
         optionsWindow.classList.add('visible');
-        disableMain()};
+        disableMain();
+    };
 
     const hideOptionsWindow = (e) => {
         optionsWindow.classList.add('hide');
         optionsWindow.classList.remove('visible');
-        restoreMain()};
+        restoreMain();
+    };
 
     const showResetConfirmation = () => {
         resetConfirmation.classList.remove('hide');
         resetConfirmation.classList.add('visible');
-        disableMain()};
+        disableMain();
+    };
 
     const hideResetConfirmation = () => {
-        resetConfirmation.classList.add('hide')
-        resetConfirmation.classList.remove('visible')
-        restoreMain()};
+        resetConfirmation.classList.add('hide');
+        resetConfirmation.classList.remove('visible');
+        restoreMain()
+    };
 
     const showNameSelectWindow = () => {
         nameSelectScreen.classList.add('visible');
-        nameSelectScreen.classList.remove('hide')};
+        nameSelectScreen.classList.remove('hide');
+    };
     
     const hideNameSelectWindow = () => {
         nameSelectScreen.classList.remove('visible');
-        nameSelectScreen.classList.add('hide')};
+        nameSelectScreen.classList.add('hide');
+    };
 
-    
     const removeStrikethrough = () => {
         game.strike.classList.remove(game.returnWinPosition());
         game.resetWinPosition();
@@ -238,14 +248,13 @@ controls = (function() {
         game.strike.classList.add('hide');
     };
 
-    // dismiss winner screen
     const winnerScreen = document.querySelector('.winner-screen');
     const hideWinnerScreen = () => {
         winnerScreen.classList.remove('visible');
         removeStrikethrough();
         resetBoard();
         restoreMain();
-    }
+    };
 
     const congratulateWinner = () => {
         if (playerOneTurn) {
@@ -256,38 +265,37 @@ controls = (function() {
         setTimeout(() => {
             winnerScreen.classList.add('visible');
             disableMain();
-        }, 500)};
+        }, 500)
+    };
         
-
     const disableMain = () => {
         main.classList.add('unclickable');
         main.classList.add('faded')
-    }
+    };
 
     const restoreMain = () => {
         main.classList.remove('unclickable');
         main.classList.remove('faded')
-    }
+    };
 
     const resetBoard = () => {
-
         for (let i = 0; i < 9; i++) {
             gameBoard.gameboard[i] = '';
         }
         gameBoard.updateBoard();
-    }
+    };
 
     const resetTurns = () => {
         playerOneTurn = true;
         highlightPlayer();
-    }
+    };
 
     const resetScores = () => {
         playerOne.resetScore();
         playerOneScore.textContent = playerOne.returnScore();
         playerTwo.resetScore();
         playerTwoScore.textContent = playerTwo.returnScore();
-    }
+    };
 
     // sets game mode when choosing player vs player game
     const choosePVP = () => {
@@ -299,7 +307,7 @@ controls = (function() {
     
     const startTwoPlayerGame = () => {
         game.twoPlayerGame();
-    }
+    };
 
     // const chooseVsComputer = () => {
 
@@ -315,37 +323,40 @@ controls = (function() {
             leftPlayerDiv.classList.remove('active-player');
             rightPlayerDiv.classList.add('active-player');
         }
-    }
+    };
 
-    
     const setPlayerNames = () => {
         playerOne = player(nameOneInput.value);
         playerTwo = player(nameTwoInput.value);
         if (playerTwo.name != '') {
             document.querySelector('p.player-one').textContent = `${playerOne.name}`;
-            document.querySelector('p.player-two').textContent = `${playerTwo.name}`}}; 
+            document.querySelector('p.player-two').textContent = `${playerTwo.name}`}
+
         // if gamemode is ai .. do stuff
+        }; 
+        
            
     const updateScores = () => {
         playerOneScore.textContent = `score ${playerOne.returnScore()}`;
-        playerTwoScore.textContent = `score ${playerTwo.returnScore()}`};
+        playerTwoScore.textContent = `score ${playerTwo.returnScore()}`;
+    };
     
-
     const verifyNames = () => {
         if (nameOneInput.value == '') {
-            alert('Please enter a valid name for Player One')
+            alert('Please enter a valid name for Player One');
         } else if (nameTwoInput.value == '') {
-            alert('Please enter a valid name for Player Two')
+            alert('Please enter a valid name for Player Two');
         } else {
             hideNameSelectWindow();
-            restoreMain()
-        }};
+            restoreMain();
+        };
+    };
 
     
     // navigation for share button
     const title = document.title;
     const url = document.querySelector('link[rel=canonical]') ? document.querySelector('link[rel=canonical]').href : document.location.href;
-    const shareButton = document.querySelector('#share-button')
+    const shareButton = document.querySelector('#share-button');
 
     shareButton.addEventListener('click', event => {
         if (navigator.share) {
@@ -357,7 +368,7 @@ controls = (function() {
         })
         .catch(console.error);
         } else {
-        alert('This feature is not supported')
+        alert('This feature is not supported');
         }
     });
 
@@ -366,7 +377,7 @@ controls = (function() {
         main.setAttribute('style',`background-color: ${bgColorPicker.value}`);
         xAndOs = document.querySelectorAll('.game-board>div>p');
         xAndOs.forEach(element => element.setAttribute('style', `color: ${xoColorPicker.value}`))
-    }
+    };
 
 
     //-------------------------TESTING AREA-------------------------//
