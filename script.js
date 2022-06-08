@@ -56,6 +56,11 @@ const game = (function() {
         }; 
     };
 
+    const switchTurns = () => {
+        playerOneTurn = !playerOneTurn,
+        controls.highlightPlayer();
+    };
+
     const checkWin = (board) => {
         if (board[0] == board[1] && board[1] == board[2] && board[2] != '') {
             winPosition = 'top-row';
@@ -94,10 +99,7 @@ const game = (function() {
         playerOneTurn = true;
         controls.highlightPlayer();
 
-        const switchTurns = () => {
-            playerOneTurn = !playerOneTurn,
-            controls.highlightPlayer();
-        }
+        
         
         // event listener function added to each 'square' when pvp is selected
         const pvpMode = (e) => {
@@ -134,24 +136,54 @@ const game = (function() {
     });
 
 
-    const vsComputer = (function() {
+    const vsComputerEasy = (function() {
         let singlePlayerTurn = true;
 
-        const aiMode = () => {
+        //randomIndex variable used to make random move for computer
+        let randomIndex = null;
 
+        //function switchTurnsComputerEasy;
+        function randomMove() {
+            while (gameBoard.gameboard[randomIndex] != '') {
+                x = Math.floor(Math.random()*9);
+                if (gameBoard.gameboard[x] == '') {
+                    gameBoard.gameboard[x] = 'o';
+                    break;
+                }
+            }
+        };
+
+        // const computerTurn = () => {
+        //     randomMove();
+        // }
+
+        const aiMode = () => {
+            // checking that square is empty 
+            if(e.target.children[0].textContent != '') {
+                return;
+            } else if (singlePlayerTurn){
+                // store 'x' in gameboard array and update the board
+                gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
+                gameBoard.updateBoard();
+                // check board for win, and if won, increments score
+                checkWin(gameBoard.gameboard);
+                if (winPosition != null) {
+                    playerOne.incrementScore();
+                }
+                switchTurns();
+            }
+            //set up the game here
         }
 
-        
+        setGameMode(aiMode);
 
-
-        // comp move -> Math.floor(Math.random()*9) ... ?
     });
 
 
 
     return {
         twoPlayerGame: twoPlayerGame,
-        vsComputer: vsComputer,
+        vsComputerEasy: vsComputerEasy,
         strike: strike,
         returnWinPosition: returnWinPosition,
         resetWinPosition: resetWinPosition,
@@ -309,7 +341,7 @@ controls = (function() {
         game.twoPlayerGame();
     };
 
-    // const chooseVsComputer = () => {
+    // const choosevsComputerEasy = () => {
 
     // }
 
