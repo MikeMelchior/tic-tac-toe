@@ -113,7 +113,8 @@ body, html {
 
     #name-select-text {
         font-size: 30px;
-        color: var(--lightgrey)
+        color: var(--lightgrey);
+        font-weight: 500;
     }
 
     input[type='text'] {
@@ -258,8 +259,8 @@ body, html {
     display: grid;
     grid-template-rows: 3fr 1fr;
     grid-template-columns: 1fr 1fr;
-    background-color: #f9c0c0;
-    border: 4px solid red;
+    background-color: var(--orange);
+    border: 8px solid red;
     border-radius: 1rem;
 }   
     .reset-confirmation > p {
@@ -267,7 +268,7 @@ body, html {
         text-align: center;
         align-self: center;
         font-size: 22px;
-        font-weight: 700;
+        font-weight: 500;
         padding: 0px 5px;
     }
 
@@ -302,15 +303,17 @@ body, html {
     height: 20%;
     min-height: 150px;
     width: 80%;
-    background-color: rgba(250, 250, 250, 0.95);
-    border: 5px solid var(--green);
+    max-width: 500px;
+    background-color: #5a5a5af2;
+    border: 5px solid var(--medgrey);
     border-radius: 1rem;
     z-index: -1;
 }
 
     .winner-screen h1 {
         text-align: center;
-        text-shadow: 1px 1px 2px goldenrod;
+        text-shadow: 1px 1px 2px var(--coral);
+        color: var(--green);
     }
 
     .winner-screen > button {
@@ -336,8 +339,8 @@ body, html {
     .main > h1 {
         place-self: center;
         font-size: max(4vw, 50px);
-        color: var(--coral);
-        text-shadow: 2px 2px #444;
+        color: #333;
+        text-shadow: 2px 2px #ddd;
     }
 
         .game-board {
@@ -346,14 +349,16 @@ body, html {
             grid-template-rows: 1fr 1fr 1fr;
             height: 50vh;
             min-height: 375px;
+            max-height: 500px;
             width: 50vh;
             min-width: 375px;
-            max-width: 100vw;
-            justify-self: center;
-            align-self: start;
-            background-color: #fdfdfd;
+            max-width: 500px;
+            place-self: center;
+            background-color: #444;
             border: 3px solid #444;
             border-radius: 0.5rem;
+            padding: 1px;
+            gap: 5px;
         }
 
             .game-board > span {
@@ -418,7 +423,8 @@ body, html {
                 text-align: center;
                 align-items: center;
                 justify-content: center;
-                border: 3px solid #444;
+                background-color: #fdfdfd;
+                border-radius: 0.2rem;
             }
 
             .game-board > div > p {
@@ -439,8 +445,8 @@ body, html {
     }
 
         .player-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            justify-content: space-evenly;
             text-align: center;
             margin: 10px 0px 25px 0px;
             padding: 5px 0px 5px 0px;
@@ -449,13 +455,21 @@ body, html {
             background-color: rgba(0, 0, 0, 0.1);
             width: 50vh;
             min-width: 375px;
-            height: 65px;
+            height: 35%;
+            min-height: 65px;
             border-radius: 1rem;
+            box-shadow: 2px 2px;
         }
         .player-stats > div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            height: 80%;
             width: 160px;
             place-self: center;
             border-radius: 1rem;
+            justify-content: center;
         }
 
             .player-stats > div > p::first-line {
@@ -523,5 +537,5 @@ body, html {
 }
 
 .active-player {
-    border: 1px solid greenyellow;
+    background-color: rgba(173, 255, 47, 0.4);
 }

@@ -93,7 +93,6 @@ const game = (function() {
     const twoPlayerGame = (function() {
         
         playerOneTurn = true;
-        playerTwoTurn = false;
         playerOneName = null;
         playerTwoName = null;
 
@@ -101,7 +100,6 @@ const game = (function() {
 
         const switchTurns = () => {
             playerOneTurn = !playerOneTurn,
-            playerTwoTurn = !playerTwoTurn
             controls.highlightPlayer();
         }
         
@@ -133,7 +131,8 @@ const game = (function() {
 
 
     const vsComputer = (function() {
-        game.gameMode = 'ai'
+        game.gameMode = 'ai';
+        // comp move -> Math.floor(Math.random()*9) ... ?
     });
 
 
@@ -267,7 +266,6 @@ controls = (function() {
 
     const resetTurns = () => {
         playerOneTurn = true;
-        playerTwoTurn = false;
         highlightPlayer();
     }
 
