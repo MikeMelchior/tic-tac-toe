@@ -9,9 +9,46 @@ const gameBoard = (function() {
             document.querySelector(`.square-${i}`).children[0].textContent = gameboard[i];
         }};
 
+    const topRow = () => {
+        return gameboard.slice(0, 3);
+    };
+    const midRow = () => {
+        return gameboard.slice(3, 6);
+    };
+    const botRow = () => {
+        return gameboard.slice(6);
+    };
+    const leftCol = () => {
+        return [gameboard[0], gameboard[3], gameboard[6]];
+    };
+    const midCol = () => {
+        return [gameboard[1], gameboard[4], gameboard[7]];
+    };
+    const rightCol = () => {
+        return [gameboard[2], gameboard[5], gameboard[8]];
+    };
+    const diagRight = () => {
+        return [gameboard[0], gameboard[4], gameboard[8]];
+    };
+    const diagLeft = () => {
+        return [gameboard[2], gameboard[4], gameboard[6]];
+    }
+
+    
+    
+
+
     return {
-        updateBoard: updateBoard,
         gameboard: gameboard,
+        updateBoard: updateBoard,
+        topRow: topRow,
+        midRow: midRow,
+        botRow: botRow,
+        leftCol: leftCol,
+        midCol: midCol,
+        rightCol: rightCol,
+        diagRight: diagRight,
+        diagLeft: diagLeft,
     };
 
 })();
@@ -20,7 +57,7 @@ const gameBoard = (function() {
 const game = (function() {
 
     let winPosition = null;
-    let gameMode = 'pvp';
+    let gameMode = null;
 
     const strike = document.querySelector('.strikethrough');
     // transform strikethrough with use of class determined by winning 'position' (ie. top-row or left-column)
@@ -69,6 +106,31 @@ const game = (function() {
         }
         controls.highlightPlayer();
     };
+
+
+
+    const blockOrWin = () => {
+        let arr = [gameBoard.topRow(), gameBoard.midRow(), gameBoard.botRow(), gameBoard.leftCol(), 
+                    gameBoard.rightCol(), gameBoard.midCol(), gameBoard.diagRight(), gameBoard.diagLeft()]
+        arr.forEach(line => {
+            let count = 0;
+            for (let i = 0; i < 3; i++) {
+                if (line[i] != '') {
+                    count++;
+                }
+            }
+            if (count == 2) {
+                if (line.indexOf('x') != -1 && line.indexOf('o') != -1) {
+                    return
+                } else {
+                    // need to fix below so index of array and index of gameboard line up
+                    gameBoard.gameboard[line.indexOf('')] = 'o';
+                    gameBoard.updateBoard();
+                    switchTurns();
+                }
+            }
+        })
+    }
 
     const checkWin = () => {
         board = gameBoard.gameboard;
@@ -120,7 +182,7 @@ const game = (function() {
             if(e.target.children[0].textContent != '') {
                 return 
             } else if (playerOneTurn){
-                // store 'x' in gameboard array and update the board
+                // grab number from square's class and store 'x' in gameboard array then update the board
                 gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
                 gameBoard.updateBoard();
                 // check board for win, and if won, increments score
@@ -150,27 +212,25 @@ const game = (function() {
 
 
     const vsComputerEasy = (function() {
-        let singlePlayerTurnEasy = true;
+
+        singlePlayerTurnEasy = true;
         controls.highlightPlayer();
         //randomIndex variable used to make random move for computer
         let randomIndex = null;
 
         function randomMove() {
             while (gameBoard.gameboard[randomIndex] != '') {
-                x = Math.floor(Math.random()*9);
-                if (gameBoard.gameboard[x] == '') {
-                    gameBoard.gameboard[x] = 'o';
+                randomIndex = Math.floor(Math.random()*9);
+                if (gameBoard.gameboard[randomIndex] == '') {
+                    gameBoard.gameboard[randomIndex] = 'o';
                     gameBoard.updateBoard();
                     break;
                 }
             }
         };
 
-        // const computerTurn = () => {
-        //     randomMove();
-        // }
-
-        const aiEasyMode = () => {
+        
+        const aiEasyMode = (e) => {
             // checking that square is empty 
             if(e.target.children[0].textContent != '') {
                 return;
@@ -182,19 +242,32 @@ const game = (function() {
                 checkWin();
                 if (winPosition != null) {
                     playerOneEasy.incrementScore();
-                    //
-
                 }
-
+                //computer move after player turn
+                blockOrWin();
+                if (singlePlayerTurnEasy) {
+                    setTimeout(() => {
+                        switchTurns();
+                        randomMove();
+                        checkWin();
+                    }, 500);
+                }
                 
+                
+                if (winPosition != null) {
+                    computerEasy.incrementScore();
+                }
+                switchTurns()
+            } else {
+                //computer move, if computers turn to start game
+                // switchTurns();
+                // randomMove();
+                // checkWin();
             }
             if (winPosition != null) {
                 controls.updateScores();
             }
-
-            switchTurns();
-            randomMove();
-            checkWin();
+            
         }
 
         setGameMode(aiEasyMode);
@@ -255,6 +328,7 @@ controls = (function() {
     const nameOneInput = document.querySelector('#player-one-name');
     const nameTwoInput = document.querySelector('#player-two-name');
     const startGameButton = document.querySelector('#start-game');
+    const vsComputerButton = document.querySelector('#versusAI');
     const winnerText = document.querySelector('.winner-screen>h1');
     const playerOneScore = document.querySelector('.player-one-score');
     const playerTwoScore = document.querySelector('.player-two-score');
@@ -313,15 +387,27 @@ controls = (function() {
     };
 
     const congratulateWinner = () => {
-        if (playerOneTurn) {
-            winnerText.textContent = `${playerOne.name} Wins!`
-        } else {
-            winnerText.textContent = `${playerTwo.name} Wins!`
-        }
-        setTimeout(() => {
-            winnerScreen.classList.add('visible');
-            disableMain();
-        }, 500)
+        if (game.gameMode == 'pvp') {
+            if (playerOneTurn) {
+                winnerText.textContent = `${playerOne.name} Wins!`;
+            } else {
+                winnerText.textContent = `${playerTwo.name} Wins!`;
+            };
+            setTimeout(() => {
+                winnerScreen.classList.add('visible');
+                disableMain();
+            }, 500);
+        } else if (game.gameMode == 'aiEasy') {
+            if (singlePlayerTurnEasy) {
+                winnerText.textContent = `${playerOneEasy.name} Wins!`;
+            } else {
+                winnerText.textContent = `${computerEasy.name} Wins!`;
+            };
+            setTimeout(() => {
+                winnerScreen.classList.add('visible');
+                disableMain();
+            }, 500);
+        }   
     };
 
     const announceTie = () => {
@@ -504,6 +590,10 @@ controls = (function() {
     startGameButton.addEventListener('click', verifyNames);
     startGameButton.addEventListener('click', startTwoPlayerGame);
 
+    vsComputerButton.addEventListener('click', chooseVsComputerEasy);
+    vsComputerButton.addEventListener('click', startComputerEasyGame);
+    vsComputerButton.addEventListener('click', setPlayerNames);
+    vsComputerButton.addEventListener('click', restoreMain);
     
     return {
         resetBoard: resetBoard,
