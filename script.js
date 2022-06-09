@@ -10,28 +10,52 @@ const gameBoard = (function() {
         }};
 
     const topRow = () => {
-        return gameboard.slice(0, 3);
+        return {
+            line: gameboard.slice(0, 3),
+            indices: [0, 1, 2]
+        }
     };
     const midRow = () => {
-        return gameboard.slice(3, 6);
+        return {
+            line: gameboard.slice(3, 6),
+            indices: [3, 4, 5]
+        }
     };
     const botRow = () => {
-        return gameboard.slice(6);
+        return {
+            line: gameboard.slice(6),
+            indices: [6, 7, 8]
+        }
     };
     const leftCol = () => {
-        return [gameboard[0], gameboard[3], gameboard[6]];
+        return {
+            line: [gameboard[0], gameboard[3], gameboard[6]],
+            indices : [0, 3, 6]
+        }
     };
     const midCol = () => {
-        return [gameboard[1], gameboard[4], gameboard[7]];
+        return {
+            line: [gameboard[1], gameboard[4], gameboard[7]],
+            indices: [1, 4, 7]
+        }
     };
     const rightCol = () => {
-        return [gameboard[2], gameboard[5], gameboard[8]];
+        return {
+            line: [gameboard[2], gameboard[5], gameboard[8]],
+            indices: [2, 5, 8]
+        }
     };
     const diagRight = () => {
-        return [gameboard[0], gameboard[4], gameboard[8]];
+        return {
+            line: [gameboard[0], gameboard[4], gameboard[8]],
+            indices: [0, 4, 8]
+        }
     };
     const diagLeft = () => {
-        return [gameboard[2], gameboard[4], gameboard[6]];
+        return {
+            line: [gameboard[2], gameboard[4], gameboard[6]],
+            indices: [2, 4, 6]
+        }
     }
 
     
@@ -86,11 +110,11 @@ const game = (function() {
     const squares = document.querySelectorAll('.game-board>div');
 
     const setGameMode = (mode) => {
-        if (gameMode == 'pvp') {
+        if (game.gameMode == 'pvp') {
             squares.forEach(square => {
                 square.addEventListener('click', mode);
             });
-        } else if (gameMode = 'aiEasy') {
+        } else if (game.gameMode = 'aiEasy') {
             squares.forEach(square => {
                 square.addEventListener('click', mode);
             });
@@ -98,9 +122,9 @@ const game = (function() {
     };
 
     const switchTurns = () => {
-        if (gameMode == 'pvp') {
+        if (game.gameMode == 'pvp') {
             playerOneTurn = !playerOneTurn;
-        } else if (gameMode == 'aiEasy') {
+        } else if (game.gameMode == 'aiEasy') {
             singlePlayerTurnEasy = !singlePlayerTurnEasy;
             
         }
@@ -112,25 +136,29 @@ const game = (function() {
     const blockOrWin = () => {
         let arr = [gameBoard.topRow(), gameBoard.midRow(), gameBoard.botRow(), gameBoard.leftCol(), 
                     gameBoard.rightCol(), gameBoard.midCol(), gameBoard.diagRight(), gameBoard.diagLeft()]
-        arr.forEach(line => {
+        arr.forEach(obj => {
+            // cant break out for foreach so instantly return each one turn has been switched
+            if (!singlePlayerTurnEasy) {
+                return
+            }
             let count = 0;
+            // if line has an 'x' and an 'o' don't make move
+            if (obj.line.indexOf('x') != -1 && obj.line.indexOf('o') != -1) {
+                return
+            }
             for (let i = 0; i < 3; i++) {
-                if (line[i] != '') {
+                if (obj.line[i] != '') {
                     count++;
                 }
             }
             if (count == 2) {
-                if (line.indexOf('x') != -1 && line.indexOf('o') != -1) {
-                    return
-                } else {
-                    // need to fix below so index of array and index of gameboard line up
-                    gameBoard.gameboard[line.indexOf('')] = 'o';
-                    gameBoard.updateBoard();
-                    switchTurns();
-                }
-            }
-        })
-    }
+                gameBoard.gameboard[obj.indices[obj.line.indexOf('')]] = 'o';
+                gameBoard.updateBoard();
+                switchTurns();  
+                } 
+            })
+        }
+    
 
     const checkWin = () => {
         board = gameBoard.gameboard;
@@ -163,7 +191,8 @@ const game = (function() {
         if (winPosition != null) {
             controls.congratulateWinner();
         };
-        if (gameBoard.gameboard.indexOf('') == -1) {
+        if (winPosition == null && gameBoard.gameboard.indexOf('') == -1) {
+            singlePlayerTurnEasy = true;
             controls.announceTie();
         }
     };
@@ -217,8 +246,8 @@ const game = (function() {
         controls.highlightPlayer();
         //randomIndex variable used to make random move for computer
         let randomIndex = null;
-
         function randomMove() {
+            randomIndex = null;
             while (gameBoard.gameboard[randomIndex] != '') {
                 randomIndex = Math.floor(Math.random()*9);
                 if (gameBoard.gameboard[randomIndex] == '') {
@@ -242,36 +271,38 @@ const game = (function() {
                 checkWin();
                 if (winPosition != null) {
                     playerOneEasy.incrementScore();
+                    switchTurns();
                 }
                 //computer move after player turn
-                blockOrWin();
-                if (singlePlayerTurnEasy) {
-                    setTimeout(() => {
+                setTimeout(() => {
+                    if (singlePlayerTurnEasy && gameBoard.gameboard.indexOf('') != -1) {
+                    blockOrWin();
+                    checkWin();
+                    if (winPosition != null ) {
+                        computerEasy.incrementScore();
+                    }
+                    }
+                    if (singlePlayerTurnEasy && gameBoard.gameboard.indexOf('') != -1) {
                         switchTurns();
                         randomMove();
-                        checkWin();
-                    }, 500);
-                }
+                        checkWin();    
+                        if (winPosition != null ) {
+                            computerEasy.incrementScore();
+                        }
+                    }
+                    if (!singlePlayerTurnEasy) {
+                        switchTurns();
+                    }
                 
-                
-                if (winPosition != null) {
-                    computerEasy.incrementScore();
-                }
-                switchTurns()
-            } else {
-                //computer move, if computers turn to start game
-                // switchTurns();
-                // randomMove();
-                // checkWin();
+                    if (winPosition != null) {
+                        controls.updateScores();
+                    }
+                }, 500);
+                 
             }
-            if (winPosition != null) {
-                controls.updateScores();
-            }
-            
         }
-
+        
         setGameMode(aiEasyMode);
-
     });
 
 
@@ -387,11 +418,12 @@ controls = (function() {
     };
 
     const congratulateWinner = () => {
+
         if (game.gameMode == 'pvp') {
             if (playerOneTurn) {
-                winnerText.textContent = `${playerOne.name} Wins!`;
+                winnerText.textContent = `${playerOneText.textContent} Wins!`;
             } else {
-                winnerText.textContent = `${playerTwo.name} Wins!`;
+                winnerText.textContent = `${playerTwoText.textContent} Wins!`;
             };
             setTimeout(() => {
                 winnerScreen.classList.add('visible');
@@ -399,9 +431,9 @@ controls = (function() {
             }, 500);
         } else if (game.gameMode == 'aiEasy') {
             if (singlePlayerTurnEasy) {
-                winnerText.textContent = `${playerOneEasy.name} Wins!`;
+                winnerText.textContent = `${playerOneText.textContent} Wins!`;
             } else {
-                winnerText.textContent = `${computerEasy.name} Wins!`;
+                winnerText.textContent = `${playerTwoText.textContent} Wins!`;
             };
             setTimeout(() => {
                 winnerScreen.classList.add('visible');
@@ -509,8 +541,14 @@ controls = (function() {
         
            
     const updateScores = () => {
-        playerOneScore.textContent = `score ${playerOne.returnScore()}`;
-        playerTwoScore.textContent = `score ${playerTwo.returnScore()}`;
+        if (game.gameMode == 'pvp') {
+            playerOneScore.textContent = `score ${playerOne.returnScore()}`;
+            playerTwoScore.textContent = `score ${playerTwo.returnScore()}`;
+        } else if (game.gameMode == 'aiEasy') {
+            playerOneScore.textContent = `score ${playerOneEasy.returnScore()}`;
+            playerTwoScore.textContent = `score ${computerEasy.returnScore()}`;
+        }
+        
     };
     
     const verifyNames = () => {
