@@ -79,7 +79,7 @@ const gameBoard = (function() {
 
 
 const game = (function() {
-
+    
     let winPosition = null;
     let gameMode = null;
 
@@ -198,7 +198,7 @@ const game = (function() {
     };
 
     const twoPlayerGame = (function() {
-
+        
         //set player one to have first turn
         playerOneTurn = true;
         controls.highlightPlayer();
@@ -235,7 +235,7 @@ const game = (function() {
         }
         // adds event listener to each square for PvP game-play
         setGameMode(pvpMode);
-        
+        document.querySelector('.game-mode-btn').textContent = "Play vs Computer";
         
     });
 
@@ -260,6 +260,7 @@ const game = (function() {
 
         
         const aiEasyMode = (e) => {
+            controls.main.classList.add('unclickable');
             // checking that square is empty 
             if(e.target.children[0].textContent != '') {
                 return;
@@ -274,6 +275,7 @@ const game = (function() {
                     switchTurns();
                 }
                 //computer move after player turn
+                
                 setTimeout(() => {
                     if (singlePlayerTurnEasy && gameBoard.gameboard.indexOf('') != -1) {
                     blockOrWin();
@@ -297,12 +299,15 @@ const game = (function() {
                     if (winPosition != null) {
                         controls.updateScores();
                     }
+                    controls.main.classList.remove('unclickable');
                 }, 500);
                  
             }
         }
         
         setGameMode(aiEasyMode);
+        document.querySelector('.game-mode-btn').textContent = "Two Player Game";
+
     });
 
 
@@ -647,6 +652,7 @@ controls = (function() {
         updateScores: updateScores,
         removeStrikethrough: removeStrikethrough,
         highlightPlayer: highlightPlayer,
+        main: main,
     }
 
 })();
