@@ -618,7 +618,11 @@ controls = (function() {
     resetBtn.addEventListener('click', resetTurns);
     resetBtn.addEventListener('click', hideResetConfirmation);
     resetBtn.addEventListener('click', resetScores);
-    resetBtn.addEventListener('click', showNameSelectWindow);
+    resetBtn.addEventListener('click', () => {
+        if (game.gameMode == 'pvp') {
+            showNameSelectWindow();
+        }
+    });
     cancelReset.addEventListener('click', hideResetConfirmation);
     
     winnerScreenExit.addEventListener('click', hideWinnerScreen);
