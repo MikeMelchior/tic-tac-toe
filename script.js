@@ -46,22 +46,32 @@ const game = (function() {
         })
     };
 
+    const squares = document.querySelectorAll('.game-board>div');
+
     const setGameMode = (mode) => {
         if (gameMode == 'pvp') {
-            document.querySelectorAll('.game-board>div').forEach(square => {
-                square.addEventListener('click', mode)
+            squares.forEach(square => {
+                square.addEventListener('click', mode);
             });
-        } else if (gameMode = 'ai') {
-            //do stuff here
+        } else if (gameMode = 'aiEasy') {
+            squares.forEach(square => {
+                square.addEventListener('click', mode);
+            });
         }; 
     };
 
     const switchTurns = () => {
-        playerOneTurn = !playerOneTurn,
+        if (gameMode == 'pvp') {
+            playerOneTurn = !playerOneTurn;
+        } else if (gameMode == 'aiEasy') {
+            singlePlayerTurnEasy = !singlePlayerTurnEasy;
+            
+        }
         controls.highlightPlayer();
     };
 
-    const checkWin = (board) => {
+    const checkWin = () => {
+        board = gameBoard.gameboard;
         if (board[0] == board[1] && board[1] == board[2] && board[2] != '') {
             winPosition = 'top-row';
             Strikethrough(winPosition);
@@ -91,6 +101,9 @@ const game = (function() {
         if (winPosition != null) {
             controls.congratulateWinner();
         };
+        if (gameBoard.gameboard.indexOf('') == -1) {
+            controls.announceTie();
+        }
     };
 
     const twoPlayerGame = (function() {
@@ -111,7 +124,7 @@ const game = (function() {
                 gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
                 gameBoard.updateBoard();
                 // check board for win, and if won, increments score
-                checkWin(gameBoard.gameboard);
+                checkWin();
                 if (winPosition != null) {
                     playerOne.incrementScore();
                 }
@@ -119,7 +132,7 @@ const game = (function() {
             } else {
                 gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'o'
                 gameBoard.updateBoard();
-                checkWin(gameBoard.gameboard);
+                checkWin();
                 if (winPosition != null) {
                     playerTwo.incrementScore();
                 }
@@ -137,17 +150,17 @@ const game = (function() {
 
 
     const vsComputerEasy = (function() {
-        let singlePlayerTurn = true;
-
+        let singlePlayerTurnEasy = true;
+        controls.highlightPlayer();
         //randomIndex variable used to make random move for computer
         let randomIndex = null;
 
-        //function switchTurnsComputerEasy;
         function randomMove() {
             while (gameBoard.gameboard[randomIndex] != '') {
                 x = Math.floor(Math.random()*9);
                 if (gameBoard.gameboard[x] == '') {
                     gameBoard.gameboard[x] = 'o';
+                    gameBoard.updateBoard();
                     break;
                 }
             }
@@ -157,25 +170,34 @@ const game = (function() {
         //     randomMove();
         // }
 
-        const aiMode = () => {
+        const aiEasyMode = () => {
             // checking that square is empty 
             if(e.target.children[0].textContent != '') {
                 return;
-            } else if (singlePlayerTurn){
+            } else if (singlePlayerTurnEasy){
                 // store 'x' in gameboard array and update the board
                 gameBoard.gameboard[e.target.classList[0].split('-')[1]] = 'x'
                 gameBoard.updateBoard();
                 // check board for win, and if won, increments score
-                checkWin(gameBoard.gameboard);
+                checkWin();
                 if (winPosition != null) {
-                    playerOne.incrementScore();
+                    playerOneEasy.incrementScore();
+                    //
+
                 }
-                switchTurns();
+
+                
             }
-            //set up the game here
+            if (winPosition != null) {
+                controls.updateScores();
+            }
+
+            switchTurns();
+            randomMove();
+            checkWin();
         }
 
-        setGameMode(aiMode);
+        setGameMode(aiEasyMode);
 
     });
 
@@ -236,6 +258,8 @@ controls = (function() {
     const winnerText = document.querySelector('.winner-screen>h1');
     const playerOneScore = document.querySelector('.player-one-score');
     const playerTwoScore = document.querySelector('.player-two-score');
+    const playerOneText = document.querySelector('p.player-one');
+    const playerTwoText = document.querySelector('p.player-two');
     const leftPlayerDiv = document.querySelector('div.player-one');
     const rightPlayerDiv = document.querySelector('div.player-two');
 
@@ -299,6 +323,14 @@ controls = (function() {
             disableMain();
         }, 500)
     };
+
+    const announceTie = () => {
+        winnerText.textContent = `It's a tie!`
+        setTimeout(() => {
+            winnerScreen.classList.add('visible');
+            disableMain();
+        }, 500);
+    }
         
     const disableMain = () => {
         main.classList.add('unclickable');
@@ -335,37 +367,59 @@ controls = (function() {
         newGameWindow.classList.remove('visible');
         newGameWindow.classList.add('hide');
         nameSelectScreen.classList.add('visible');
+        nameSelectScreen.classList.remove('hide');
     }; 
     
     const startTwoPlayerGame = () => {
         game.twoPlayerGame();
     };
 
-    // const choosevsComputerEasy = () => {
+    const chooseVsComputerEasy = () => {
+        game.gameMode = 'aiEasy';
+        newGameWindow.classList.remove('visible');
+        newGameWindow.classList.add('hide');
 
-    // }
+    }
+
+    const startComputerEasyGame = () => {
+        game.vsComputerEasy();
+    }
 
 
     // highlights current player's turn
     const highlightPlayer = () => {
-        if (playerOneTurn) {
-            leftPlayerDiv.classList.add('active-player');
-            rightPlayerDiv.classList.remove('active-player');
-        } else {
-            leftPlayerDiv.classList.remove('active-player');
-            rightPlayerDiv.classList.add('active-player');
-        }
+        if (game.gameMode == 'pvp') {
+            if (playerOneTurn ) {
+                leftPlayerDiv.classList.add('active-player');
+                rightPlayerDiv.classList.remove('active-player');
+            } else {
+                leftPlayerDiv.classList.remove('active-player');
+                rightPlayerDiv.classList.add('active-player');
+            }
+        } else if (game.gameMode == 'aiEasy') {
+            if (singlePlayerTurnEasy) {
+                leftPlayerDiv.classList.add('active-player');
+                rightPlayerDiv.classList.remove('active-player');
+            } else {
+                leftPlayerDiv.classList.remove('active-player');
+                rightPlayerDiv.classList.add('active-player');
+            }
+        }    
     };
 
     const setPlayerNames = () => {
         playerOne = player(nameOneInput.value);
         playerTwo = player(nameTwoInput.value);
         if (playerTwo.name != '') {
-            document.querySelector('p.player-one').textContent = `${playerOne.name}`;
-            document.querySelector('p.player-two').textContent = `${playerTwo.name}`}
-
-        // if gamemode is ai .. do stuff
-        }; 
+            playerOneText.textContent = `${playerOne.name}`;
+            playerTwoText.textContent = `${playerTwo.name}`;
+        } else if (game.gameMode == 'aiEasy') {
+            playerOneEasy = player('Player');
+            computerEasy = player('Computer');
+            playerOneText.textContent = `${playerOneEasy.name}`;
+            playerTwoText.textContent = `${computerEasy.name}`;
+        }
+    }; 
         
            
     const updateScores = () => {
@@ -456,6 +510,7 @@ controls = (function() {
         disableMain: disableMain,
         restoreMain: restoreMain,
         congratulateWinner: congratulateWinner, 
+        announceTie: announceTie,
         setPlayerNames: setPlayerNames,
         updateScores: updateScores,
         removeStrikethrough: removeStrikethrough,
