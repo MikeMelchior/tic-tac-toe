@@ -240,6 +240,7 @@ body, html {
         border: none;
         background-color: var(--menublack);
         height: 50px;
+        width: 50px;
     }
 
 .reset-confirmation {
