@@ -394,7 +394,7 @@ controls = (function() {
     const playerTwoText = document.querySelector('p.player-two');
     const leftPlayerDiv = document.querySelector('div.player-one');
     const rightPlayerDiv = document.querySelector('div.player-two');
-    const gameModeBtn = document.querySelector('.game-mode-btn');
+    const newGameButton = document.querySelector('.game-mode-btn');
 
     const disableMain = () => {
         main.classList.add('unclickable');
@@ -540,6 +540,7 @@ controls = (function() {
     const newGame = () => {
         newGameWindow.classList.add('visible');
         newGameWindow.classList.remove('hide');
+        disableMain();
     }
 
     // highlights current player's turn
@@ -639,6 +640,11 @@ controls = (function() {
             showNameSelectWindow();
         }
     });
+    resetBtn.addEventListener('click', () => {
+        if (game.gameMode == 'pvp') {
+            disableMain();
+        }
+    })
     cancelReset.addEventListener('click', hideResetConfirmation);
     
     winnerScreenExit.addEventListener('click', hideWinnerScreen);
@@ -655,9 +661,10 @@ controls = (function() {
     vsComputerButton.addEventListener('click', restoreMain);
 
     
-    gameModeBtn.addEventListener('click', game.removeGameMode);
-    gameModeBtn.addEventListener('click', resetBoard);
-    gameModeBtn.addEventListener('click', newGame);
+    newGameButton.addEventListener('click', game.removeGameMode);
+    newGameButton.addEventListener('click', resetBoard);
+    newGameButton.addEventListener('click', newGame);
+
     
     return {
         resetBoard: resetBoard,
@@ -670,7 +677,6 @@ controls = (function() {
         removeStrikethrough: removeStrikethrough,
         highlightPlayer: highlightPlayer,
         main: main,
-        gameModeBtn: gameModeBtn,
     }
 
 })();
