@@ -206,6 +206,8 @@ body, html {
     }
 
     button#share-button {
+        display: flex;
+        align-items: center;
         height: 80%;
         width: 80%;
         place-self: center;
@@ -220,6 +222,7 @@ body, html {
     }
 
     #share-button > img {
+        padding-right: 5px;
         height: 30px;
     }  
 
