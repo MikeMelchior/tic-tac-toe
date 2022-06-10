@@ -334,6 +334,7 @@ body, html {
         font-size: max(4vw, 50px);
         color: #333;
         text-shadow: 2px 2px #ddd;
+        margin-bottom: -30px;
     }
 
         .game-board {
@@ -472,13 +473,15 @@ body, html {
     }
 
         .options > button {
+            color: white;
             width: 105px;
             height: 55px;
             font-weight: 500;
             font-size: 18px;
             line-height: 18px;
             border-radius: 1rem;
-            box-shadow: 1px 1px;
+            box-shadow: 1px 1px white;
+            text-shadow: 1px 1px #222;
             padding-top: 1px;
         }
 
@@ -487,7 +490,7 @@ body, html {
         }
         .options > button:nth-child(2) {
             margin: 0px 30px;
-            background-color: var(--purple);
+            background-color: var(--lightyellow);
         }
         .options > button:nth-child(3) {
             background-color: var(--medgrey);
@@ -495,12 +498,13 @@ body, html {
 
     .footer {
         display: flex;
+        width: 100%;
         justify-content: center;
-        align-items: flex-end;
+        align-items: center;
         font-size: 16px;
-        height: 30px;
+        height: 40px;
         margin-top: auto;
-        margin-bottom: 5px;
+        background-color: rgba(0, 0, 0, 0.1);
     }
 
         .footer > img {
@@ -527,7 +531,7 @@ body, html {
 }
 
 .active-player {
-    box-shadow: 0px 0px 10px rgba(173, 255, 47, 1);
+    box-shadow: inset 0px 0px 10px rgba(173, 255, 47, 1);
 }
 
 .centered {
