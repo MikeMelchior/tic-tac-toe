@@ -323,10 +323,10 @@ const game = (function() {
                     if (!singlePlayerTurnEasy) {
                         switchTurns();
                     }
-                }, 400);
+                }, 300);
             setTimeout(() => {
             controls.main.classList.remove('unclickable');
-            }, 450);     
+            }, 650);     
             }
         }
         
@@ -399,6 +399,16 @@ controls = (function() {
     const rightPlayerDiv = document.querySelector('div.player-two');
     const gameModeBtn = document.querySelector('.game-mode-btn');
 
+    const disableMain = () => {
+        main.classList.add('unclickable');
+        main.classList.add('faded')
+    };
+
+    const restoreMain = () => {
+        main.classList.remove('unclickable');
+        main.classList.remove('faded')
+    };
+    
     const showOptionsWindow = (e) => {
         optionsWindow.classList.remove('hide');
         optionsWindow.classList.add('visible');
@@ -481,15 +491,7 @@ controls = (function() {
         }, 500);
     }
         
-    const disableMain = () => {
-        main.classList.add('unclickable');
-        main.classList.add('faded')
-    };
-
-    const restoreMain = () => {
-        main.classList.remove('unclickable');
-        main.classList.remove('faded')
-    };
+    
 
     const resetBoard = () => {
         for (let i = 0; i < 9; i++) {
