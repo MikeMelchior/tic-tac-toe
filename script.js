@@ -107,9 +107,8 @@ const game = (function() {
         })
     };
 
-    const squares = document.querySelectorAll('.game-board>div');
-
     const setGameMode = (mode) => {
+        const squares = document.querySelectorAll('.game-board>div');
         if (game.gameMode == 'pvp') {
             squares.forEach(square => {
                 square.addEventListener('click', mode);
@@ -124,16 +123,15 @@ const game = (function() {
     const switchTurns = () => {
         if (game.gameMode == 'pvp') {
             playerOneTurn = !playerOneTurn;
+            controls.highlightPlayer();
         } else if (game.gameMode == 'aiEasy') {
             singlePlayerTurnEasy = !singlePlayerTurnEasy;
-            
-        }
-        controls.highlightPlayer();
+        }   
     };
 
     const attemptWinningMove = () => {
         // array of functions that each return an object including a current array of a different
-    // winning combination on the board, as well as the game board indices of that array (see gameBoard object)
+        // winning combination on the board, as well as the game board indices of that array (see gameBoard object)
     let arr = [gameBoard.topRow(), gameBoard.midRow(), gameBoard.botRow(), gameBoard.leftCol(), 
         gameBoard.rightCol(), gameBoard.midCol(), gameBoard.diagRight(), gameBoard.diagLeft()];
         arr.forEach(obj => {
@@ -218,6 +216,7 @@ const game = (function() {
     };
 
     const twoPlayerGame = (function() {
+        // adds event listener to each square for PvP game-play
         
         //set player one to have first turn
         playerOneTurn = true;
@@ -253,17 +252,16 @@ const game = (function() {
                 controls.updateScores();
             }
         }
-        // adds event listener to each square for PvP game-play
-        setGameMode(pvpMode);
-        controls.gameModeBtn.textContent = "Play vs Computer";
         
+        setGameMode(pvpMode);
     });
 
 
     const vsComputerEasy = (function() {
+        //set game mode vs computer
+        
 
         singlePlayerTurnEasy = true;
-        controls.highlightPlayer();
 
         //randomIndex variable used to make random move for computer
         let randomIndex = null;
@@ -331,7 +329,6 @@ const game = (function() {
         }
         
         setGameMode(aiEasyMode);
-        controls.gameModeBtn.textContent = "Two Player Game";
 
     });
 
@@ -506,10 +503,18 @@ controls = (function() {
     };
 
     const resetScores = () => {
-        playerOne.resetScore();
-        playerOneScore.textContent = playerOne.returnScore();
-        playerTwo.resetScore();
-        playerTwoScore.textContent = playerTwo.returnScore();
+        if (game.gameMode == 'pvp') {
+            playerOne.resetScore();
+            playerOneScore.textContent = `score ${playerOne.returnScore()}`;
+            playerTwo.resetScore();
+            playerTwoScore.textContent = `score ${playerTwo.returnScore()}`;
+        } else if (game.gameMode == "aiEasy") {
+            playerOneEasy.resetScore();
+            playerOneScore.textContent = `score ${playerOneEasy.returnScore()}`;
+            computerEasy.resetScore();
+            playerTwoScore.textContent = `score ${computerEasy.returnScore()}`;
+        }
+        
     };
 
     // sets game mode when choosing player vs player game
@@ -525,52 +530,37 @@ controls = (function() {
         game.twoPlayerGame();
     };
 
-    const chooseVsComputerEasy = () => {
+    const startComputerEasyGame = () => {
         game.gameMode = 'aiEasy';
         newGameWindow.classList.remove('visible');
         newGameWindow.classList.add('hide');
-
-    }
-
-    const startComputerEasyGame = () => {
         game.vsComputerEasy();
     }
 
-    const switchGameModes = () => {
-        if (game.gameMode == 'pvp') {
-            //do stuff
-        } else if (game.gameMode == 'aiEasy') {
-            //do stuff
-        }
+    const newGame = () => {
+        newGameWindow.classList.add('visible');
+        newGameWindow.classList.remove('hide');
     }
 
     // highlights current player's turn
     const highlightPlayer = () => {
-        if (game.gameMode == 'pvp') {
-            if (playerOneTurn ) {
-                leftPlayerDiv.classList.add('active-player');
-                rightPlayerDiv.classList.remove('active-player');
-            } else {
-                leftPlayerDiv.classList.remove('active-player');
-                rightPlayerDiv.classList.add('active-player');
-            }
-        } else if (game.gameMode == 'aiEasy') {
-            if (singlePlayerTurnEasy) {
-                leftPlayerDiv.classList.add('active-player');
-                rightPlayerDiv.classList.remove('active-player');
-            } else {
-                leftPlayerDiv.classList.remove('active-player');
-                rightPlayerDiv.classList.add('active-player');
-            }
-        }    
+        if (playerOneTurn) {
+            leftPlayerDiv.classList.add('active-player');
+            rightPlayerDiv.classList.remove('active-player');
+        } else {
+            leftPlayerDiv.classList.remove('active-player');
+            rightPlayerDiv.classList.add('active-player');
+        } 
     };
 
     const setPlayerNames = () => {
-        playerOne = player(nameOneInput.value);
-        playerTwo = player(nameTwoInput.value);
-        if (playerTwo.name != '') {
-            playerOneText.textContent = `${playerOne.name}`;
-            playerTwoText.textContent = `${playerTwo.name}`;
+        if(game.gameMode == 'pvp') {
+            playerOne = player(nameOneInput.value);
+            playerTwo = player(nameTwoInput.value);
+            if (playerTwo.name != '') {
+                playerOneText.textContent = `${playerOne.name}`;
+                playerTwoText.textContent = `${playerTwo.name}`;
+            }
         } else if (game.gameMode == 'aiEasy') {
             playerOneEasy = player('Player');
             computerEasy = player('Computer');
@@ -629,6 +619,11 @@ controls = (function() {
         xAndOs.forEach(element => element.setAttribute('style', `color: ${xoColorPicker.value}`))
     };
 
+    //-------------- TEST
+
+
+    //-----------------
+
     optionsButton.addEventListener('click', showOptionsWindow);
     optionsExit.addEventListener('click', hideOptionsWindow);
     optionsApply.addEventListener('click', setColors);
@@ -651,14 +646,18 @@ controls = (function() {
     pvp.addEventListener('click', choosePVP);
     startGameButton.addEventListener('click', verifyNames);
     startGameButton.addEventListener('click', setPlayerNames);
+    startGameButton.addEventListener('click', resetScores);
     startGameButton.addEventListener('click', startTwoPlayerGame);
 
-    vsComputerButton.addEventListener('click', chooseVsComputerEasy);
     vsComputerButton.addEventListener('click', startComputerEasyGame);
     vsComputerButton.addEventListener('click', setPlayerNames);
+    vsComputerButton.addEventListener('click', resetScores);
     vsComputerButton.addEventListener('click', restoreMain);
 
-
+    
+    gameModeBtn.addEventListener('click', game.removeGameMode);
+    gameModeBtn.addEventListener('click', resetBoard);
+    gameModeBtn.addEventListener('click', newGame);
     
     return {
         resetBoard: resetBoard,
