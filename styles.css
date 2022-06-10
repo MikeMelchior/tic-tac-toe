@@ -46,7 +46,6 @@ body, html {
     min-height: 300px;
     width: 40%;
     min-width: 300px;
-    place-self: center;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 2fr 1fr;
@@ -96,7 +95,6 @@ body, html {
     min-height: 300px;
     width: 40%;
     min-width: 300px;
-    place-self: center;
     display: grid;
     grid-template-rows: 3fr 3fr 1fr;
     background-color: var(--menublack);
@@ -152,7 +150,6 @@ body, html {
     width: 40%;
     min-width: 310px;
     max-width: 500px;
-    place-self: center;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
     background-color: var(--menublack);
@@ -251,7 +248,6 @@ body, html {
     min-height: 300px;
     width: 40%;
     min-width: 310px;
-    place-self: center;
     display: grid;
     grid-template-rows: 3fr 1fr;
     grid-template-columns: 1fr 1fr;
@@ -293,7 +289,6 @@ body, html {
 
 .winner-screen {
     position: absolute;
-    place-self: center;
     display: grid;
     grid-template-rows: 1fr 1fr;
     justify-content: center;
@@ -529,4 +524,10 @@ body, html {
 
 .active-player {
     box-shadow: 0px 0px 10px rgba(173, 255, 47, 1);
+}
+
+.centered {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
