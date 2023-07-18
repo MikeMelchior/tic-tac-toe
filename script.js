@@ -383,6 +383,7 @@ controls = (function() {
     const newGameWindow = document.querySelector('.start-new-game');
     const pvp = document.querySelector('#pvp');
     const nameSelectScreen = document.querySelector('.name-select-screen');
+    const exitNameSelect = document.querySelector('.exit-name-select');
     const nameOneInput = document.querySelector('#player-one-name');
     const nameTwoInput = document.querySelector('#player-two-name');
     const startGameButton = document.querySelector('#start-game');
@@ -620,10 +621,6 @@ controls = (function() {
         xAndOs.forEach(element => element.setAttribute('style', `color: ${xoColorPicker.value}`))
     };
 
-    //-------------- TEST
-
-
-    //-----------------
 
     optionsButton.addEventListener('click', showOptionsWindow);
     optionsExit.addEventListener('click', hideOptionsWindow);
@@ -650,6 +647,7 @@ controls = (function() {
     winnerScreenExit.addEventListener('click', hideWinnerScreen);
     
     pvp.addEventListener('click', choosePVP);
+
     startGameButton.addEventListener('click', verifyNames);
     startGameButton.addEventListener('click', setPlayerNames);
     startGameButton.addEventListener('click', resetScores);
@@ -664,6 +662,11 @@ controls = (function() {
     newGameButton.addEventListener('click', game.removeGameMode);
     newGameButton.addEventListener('click', resetBoard);
     newGameButton.addEventListener('click', newGame);
+
+    exitNameSelect.addEventListener('click', () => {
+        hideNameSelectWindow();
+        newGame()
+    })
 
     
     return {

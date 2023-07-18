@@ -91,15 +91,27 @@ body, html {
 
 .name-select-screen {
     position: absolute;
-    height: 35%;
-    min-height: 300px;
+    padding: 40px 20px;
+    height: 40%;
+    min-height: 380px;
     width: 40%;
     min-width: 300px;
     display: grid;
-    grid-template-rows: 3fr 3fr 1fr;
+    grid-template-rows: 3fr 3fr auto;
+    gap: 24px;
     background-color: var(--menublack);
     border: 4px solid var(--medgrey);
     border-radius: 1rem;
+}
+
+.exit-name-select,
+.options-exit {
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    font-size: 30px;
+    color: white;
+    font-weight: 600;
 }
 
     .name-select-screen > div {
@@ -132,12 +144,10 @@ body, html {
     .name-select-screen > button {
         width: 130px;
         height: 45px;
-        padding-top: 2px;
         place-self: center;
         border: 3px solid var(--lightgrey);
         border-radius: 1rem;
         background-color: var(--green);
-        margin-bottom: 15px;
         font-weight: 600;
         font-size: 18px;
         box-shadow: 1px 1px 4px #444;
@@ -225,19 +235,6 @@ body, html {
         padding-right: 5px;
         height: 30px;
     }  
-
-    .options-window > div > button.options-exit {
-        color: #111;
-        width: 35px;
-        height: 35px;
-        background-color: #aaa;
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        border-radius: 1rem;
-        font-size: large;
-        font-weight: 500;
-    }
 
     input[type='color'] {
         border: none;
